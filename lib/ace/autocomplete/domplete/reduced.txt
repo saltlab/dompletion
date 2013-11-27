@@ -1,0 +1,26 @@
+ body div#wrapper.hfeed div#header div#masthead div#access div.menu ul li.page-item-12.page_item.current_page_parent.page-item-120.current_page_ancestor.page-item-32.current_page_item.page_item_has_children ul.children li.page-item-1742.page-item-1999.page-item-798.page-item-2289.page_item.page-item-1058.page-item-399.page-item-1014.page-item-2172.page-item-1736.page-item-1115.page-item-1440.page-item-1911.current_page_item.page-item-1383.page_item_has_children.page-item-1380 
+ body div#wrapper.hfeed div#header div#masthead div#branding h1#site-title span 
+ body div#wrapper.hfeed div#header div#masthead div#access div.menu ul li.page-item-43.page-item-2253.page-item-1045.page-item-120.page-item-12.current_page_ancestor.page-item-32.current_page_item.page_item_has_children.page_item.current_page_parent.page-item-1135 
+ body div#wrapper.hfeed div#header div#masthead div#branding div#site-title span 
+ body div#wrapper.hfeed div#main div#primary.widget-area ul.xoxo li#recent-posts-5.widget-container.widget_recent_entries ul li 
+ body div#wrapper.hfeed div#main div#secondary.widget-area ul.xoxo li#meta-2.widget-container.widget_meta ul li 
+ body div#wrapper.hfeed divfooter# div#colophon div#site-generator 
+ body div#wrapper.hfeed div#header div#masthead div#access div.menu ul li.page-item-12.page_item.current_page_parent.current_page_ancestor.current_page_item.page_item_has_children ul.children li.page_item_has_children.page_item.page-item-2172 ul.children li.page-item-238.page-item-409.page-item-99.page-item-186.page_item.page-item-258 
+ body div#wrapper.hfeed div#main div#primary.widget-area ul.xoxo li#text-4.widget-container.widget_text 
+ body div#wrapper.hfeed div#main div#primary.widget-area ul.xoxo li#search-5.widget-container.widget_search 
+ body div#wrapper.hfeed div#main div#primary.widget-area ul.xoxo li#recent-posts-5.widget-container.widget_recent_entries 
+ body div#wrapper.hfeed div#main div#secondary.widget-area ul.xoxo li#meta-2.widget-container.widget_meta 
+ body div#wrapper.hfeed div#main div#container div#content div#post-12.post-12.page.type-page.status-publish.hentry 
+ body div#wrapper.hfeed div#main div#container div#content div#post-6.post-6.page.type-page.status-publish.hentry 
+ body div#wrapper.hfeed div#header div#masthead div#access div.skip-link.screen-reader-text 
+ body 
+ body div#wrapper.hfeed div#main div#primary.widget-area ul.xoxo li#search-5.widget-container.widget_search form#searchform.searchform div 
+ body div#wrapper.hfeed div#main div#container div#content div#post-6.post-6.page.type-page.status-publish.hentry div.entry-content ol 
+ body div#wrapper.hfeed div#main div#container div#content div#post-12.post-12.page.type-page.status-publish.hentry div.entry-content ul li 
+ body div#wrapper.hfeed div#main div#container div#content div#post-6.page.hentry.type-page.post-6.status-publish div.entry-content ul li 
+ body div#wrapper.hfeed div#main div#primary.widget-area ul.xoxo li#text-4.widget-container.widget_text div.textwidget table tbody tr td 
+ body div#wrapper.hfeed div#main div#container div#content div#post-12.post-12.page.type-page.status-publish.hentry div.entry-content p 
+ body div#wrapper.hfeed div#main div#container div#content div#post-6.page.hentry.type-page.post-6.status-publish div.entry-content ol 
+ body div#wrapper.hfeed div#main div#secondary.widget-area ul.xoxo li#meta-2.widget-container.widget_meta ul li a 
+ body div#akismet-credit-insert p 
+ body div#wrapper.hfeed div#main div#container div#content div#post-6.post-6.page.type-page.status-publish.hentry div.entry-content p b 
