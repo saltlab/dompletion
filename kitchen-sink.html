@@ -313,6 +313,16 @@
   	padding-left:10px;
   	padding-right:10px;
   }
+  #replace{
+  	position:fixed;
+  	right: 5px;
+  	top: 50px;
+  	z-index:99999;
+  	cursor:pointer;
+  	padding-left:10px;
+  	padding-right:10px;
+  	line-height:20px;
+  }
   .classname {
 	-moz-box-shadow:inset 0px 1px 0px 0px #ffffff;
 	-webkit-box-shadow:inset 0px 1px 0px 0px #ffffff;
@@ -384,49 +394,42 @@ function isTag() {
 	return !(isId(elem) || isClass(elem));
 }
 
-function HandlePopupResult(result,begin) {
-	var context = "document";
-    alert("result of popup is: " + result);
-    
-    if(result != '') {
-	    var counter = 0;
-	    var start = "";
-	    if(begin == 0)
-	    	start += "var element" + counter + " = " + context + "";
-	    var end = "";
-    
-	    result = result.split(' ');
+function replaceSelection() {
+	var result = editor.session.getTextRange(editor.getSelectionRange());
+	var replace = transform(result,0,"document");
+	editor.session.replace(editor.selection.getRange(), replace) 
+}
+
+function transform(result) {
+	if(result != '') {
 		console.log(result);
-    
-	    for(var i in result) {
+		var counter = 0;
+	    var start = "var element0 = document";
+	    
+	    var end = "";
+    	result = result.split(' ');
+		
+	    for(var i=0; i<result.length; i++) {
 	    	var elem = result[i];
+    		console.log(elem);
+        	if(isId(elem)) {
     	
-	    	if(isId(elem)) {
-    	
-	    		if(begin == 0) {
-	    			start += ".getElementById('";
-    			}
-	    		start += elem.substring(1) +"')";
+	    		start += ".getElementById('";
+    			start += elem.substring(1) +"')";
 	    		begin = 0;
     	
 	    	} else {
     		
-	    		console.log("in else");
 	    		var next = counter + 1;
     		
 	    		if(isClass(elem)) {
-	    			if(begin == 0) {
-	    				start += ".getElementsByClassName('";
-	    			}
+	    			start += ".getElementsByClassName('";
 	    			start += elem.substring(1) + "');\n";
 	    		} else {
-    				if(begin == 0) {
-    					start += ".getElementsByTagName('";
-    				}
+    				start += ".getElementsByTagName('";
     				start += elem + "');\n";
     			}
-    			begin = 0;
-    		
+
     			start += repeat("\t",counter) + "for(var i"+counter+" = 0; i"+counter+" < element"+counter+".length; i"+counter+"++) {\n";
     			start += repeat("\t",next) + "var element" + next + " = element"+counter+"[i"+counter+"]";
     		
@@ -435,19 +438,33 @@ function HandlePopupResult(result,begin) {
     		}
     	}
     	start += ";\n" + repeat("\t",counter) + "//place your code here...\n\n\n";
-    
-    	console.log(start + end);
-    	var code = editor.getSession().getValue();
-    	console.log(code);
-    	editor.getSession().setValue(code + start + end);
-	}
+    	return(start + end);
+    } else {
+    	return "";
+    }
+}
+
+function HandlePopupResult(context,replace) {
+	console.log(context);
+    var append = transform(context);
+	console.log(append);
+//	doc.getTextRange(Range.fromPoints({row: pos.row, column:0}, pos));
+	var pos = editor.getCursorPosition();
+	var range = editor.selection.getRange();
+	range['start']['column'] = 0;
+	console.log(range);
+	editor.session.replace(range, append); 
+//    var code = editor.getSession().getValue();
+//    console.log(code);
+//    editor.getSession().setValue(code + append);
 }
 
 
 // -->
 </script>
-  <a id="domSelector" href="http://localhost:8888/lib/ace/autocomplete/domplete/selector.html?start=0#body" onclick="return popitup(this)" class="classname">DOM Selector</a>
-	
+  <a id="domSelector" href="/lib/ace/autocomplete/domplete/selector.html" onclick="return popitup(this)" class="classname" style="visibility:hidden">DOM Selector</a>
+  <a id="replace" href="javascript:void()" onclick="return replaceSelection()" class="classname">Generate Selector Code</a>
+ 	
 <!--DEVEL-->
   <script type="text/javascript">
       var require = {

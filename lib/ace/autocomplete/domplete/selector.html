@@ -1,3 +1,5 @@
+<html>
+<head>
 <style>
 a:hover{
 	color: red;
@@ -5,50 +7,20 @@ a:hover{
 body{ 
 	margin-top: 100px;
 }
-/*div{
-	border:solid 1px red;
-	margin:10px;
-	overflow:auto;
-	min-height:50px;
-	float:left;
-	width:40%;
-}*/
+
 .circle {
 	border-radius: 50%;
 	width: 200px;
 	height: 200px; 
 	/* width and height can be anything, as long as they're equal */
 }
+
 .highlight {
-	background-color:#AAFFAA;
-}
-div[id^="wrapper_"]{
-	width: 90%;
-	max-width: 1100px;
-	min-width: 800px;
-	margin: 50px auto;
-	border:solid 1px gray;
-	padding:5px;
-}
-
-div[id^="columns_"] {
-	-webkit-column-count: 3;
-	-webkit-column-gap: 10px;
-	-webkit-column-fill: auto;
-	-moz-column-count: 3;
-	-moz-column-gap: 10px;
-	-moz-column-fill: auto;
-	column-count: 3;
-	column-gap: 15px;
-	column-fill: auto;
-}
-
-.pin {
 	display: inline-block;
-	background: #FEFEFE;
+	background: #AAFFAA;
 	border: 2px solid #FAFAFA;
 	box-shadow: 0 1px 2px rgba(34, 25, 25, 0.4);
-	margin: 0 2px 15px;
+	margin: 10px;
 	-webkit-column-break-inside: avoid;
 	-moz-column-break-inside: avoid;
 	column-break-inside: avoid;
@@ -61,20 +33,47 @@ div[id^="columns_"] {
 	-moz-transition: all .2s ease;
 	-o-transition: all .2s ease;
 	transition: all .2s ease;
+	text-align:center;
+	border: solid 2px red;
+	text-align:right;
+	float:left;
+	width: 90%;
 }
 
-.pin img {
-	width: 100%;
-	border-bottom: 1px solid #ccc;
-	padding-bottom: 15px;
-	margin-bottom: 5px;
+.pin {
+	display: inline-block;
+	background: #FEFEFE;
+	border: 2px solid #AAAAAA;
+	box-shadow: 0 1px 2px rgba(34, 25, 25, 0.4);
+	margin: 10px;
+	-webkit-column-break-inside: avoid;
+	-moz-column-break-inside: avoid;
+	column-break-inside: avoid;
+	padding: 15px;
+	padding-bottom: 5px;
+	background: -webkit-linear-gradient(45deg, #FFF, #F9F9F9);
+	opacity: 1;
+	
+	-webkit-transition: all .2s ease;
+	-moz-transition: all .2s ease;
+	-o-transition: all .2s ease;
+	transition: all .2s ease;
+	text-align:right;
+	float:left;
+	width: 90%;
 }
 
-.pin p {
-	font: 12px/18px Arial, sans-serif;
-	color: #333;
-	margin: 0;
+.header{
+	text-align: center;
+	width: 90%;
+	margin:0px auto;
 }
+.clear{
+	width:100%;
+	float:left;
+	height: 1px;
+}
+
 
 @media (min-width: 960px) {
 	#columns {
@@ -126,28 +125,134 @@ div[id^="columns_"] {
 	padding:10px;
 
 }
+
+#left{
+	border: solid 1px gray;
+	position:absolute;
+	top:50px;
+	left:10px;
+	bottom:50px;
+	right:300px;
+	overflow:auto;
+}
+#right{
+	position:absolute;
+	top:50px;
+	width:280px;
+	bottom:50px;
+	right:10px;
+	overflow: auto;
+}
+#r_left{
+	float:left;
+	width:100px;
+	min-height:100px;
+	overflow:auto;
+}
+.item {
+	float:left;
+	text-align:center;
+	width:100px;
+	line-height: 40px;
+}
+.current {
+	background-color: #DDDDDD;
+}
+#r_right{
+	float:right;
+	width:180px;
+	min-height:100px;
+	overflow: auto;
+	background-color: #DDDDDD;
+	padding-bottom: 10px;
+}
+
+.detail {
+	display:none;
+	margin-left:10px;
+	float:left;
+	overflow:auto;
+	width:160px;
+	
+}
+h3{
+	margin-top: 5px;
+	width: 100%;
+	text-align:center;
+	border-bottom: solid 1px gray;
+	padding-bottom:5px;
+}
+
+.visible {
+	display:block;
+}
+
+.step {
+	background-color: #EEEEEE;
+	width: 90%;
+	margin: 0px auto;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+	text-align: center;
+}
+.downarrow{
+	width:40px;
+	margin: 0px auto;
+	margin-left:55px;
+}
 </style>
+</head>
+<body>
 <div id="navigator"></div>
 <div id="info"></div>
 <div id="close"><a href="javascript:void(0)" onclick="CloseMySelf()">Select & Close</a></div>
-<div id="placeholder"></div>
+
+
+<div id="left"></div>
+<div id="right">
+	<div id="r_left">
+		
+	</div>
+	<div id="r_right"></div>
+</div>
+</body>
+</html>
 
 <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script type="text/javascript" src="http://requirejs.org/docs/release/2.1.10/minified/require.js"></script>
 <script type="text/javascript">
 	
-		
-	function getUrlVars() {
-    	var vars = {};
-    	var parts = window.location.href.split('#')[0].replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
-        	vars[key] = value;
-    	});
-    	return vars;
+	require(["dom"], function(domGenerator) {
+		console.log(domGenerator);
+
+	
+	partialDOM = readFile("reduced.txt");
+	partialDOM = partialDOM.split("\n");
+  	
+	
+	String.prototype.trim=function(){return this.replace(/^\s+|\s+$/g, '');};
+	
+	if (typeof String.prototype.startsWith != 'function') {
+  		// see below for better implementation!
+  		String.prototype.startsWith = function (str){
+    		return this.indexOf(str) == 0;
+  		};
 	}
 	
+	Array.prototype.pop = function() {
+    	var n = this.length >>> 0, value;
+    	if (n) {
+			value = this[--n];
+			delete this[n];
+    	}
+    	this.length = n;
+    	return value;
+	};
 	function CloseMySelf() {
-		var params = getUrlVars();
-    	try {
-       		window.opener.HandlePopupResult(window.location.hash.substring(1).replace(/\//g," ").substring(hash.length),params['start']);
+		alert(context);
+		try {
+       		window.opener.HandlePopupResult(context.substring(6),incompleteCode);
     	}
     	catch (err) {}
     	
@@ -180,90 +285,116 @@ div[id^="columns_"] {
 		return xmlHttp.responseText;
     
     }
-    
-    function getMathces(DOMString,partialDOM,trim) {
-    
-    	trim = typeof trim !== 'undefined' ? trim : true;
+    function highlight(tag) {
     	
-    	var matches = new Array();
-    	var inputs = DOMString.split(" ");
-    	
-    	for(var i=0;i<partialDOM.length;i++) {
-    		
-    		var path = partialDOM[i];
-    		var check = 1; 
-    		
-    		//first and last are empty spaces
-    		for(var j=1; j<inputs.length; j++) {
-    			
-    			var term = inputs[j];
-    			var indexDot = -1;
-    			var indexHash = -1;
-    			
-    			var dot = "(\\.[^\\.# ]+)*(?=[ ])", hash="(#[^#\\. ]+)*(?=[ \\.])", tagName = "[^#\\. ]*(?=[ \\.#])";
-    			
-    			if(term.charAt(0) == '.') {
-    				indexDot = 0;
-    			} else if(term.charAt(0) == '#') {
-    				indexHash = 0;
-    			} else {
-    				tagName = term.split("#")[0].split(".")[0];
-    			}
-    			if(term.indexOf("#") != -1) {
-    				indexHash = term.indexOf("#");
-    				hash = term.substring(indexHash).split(".")[0];
-    			}
-    			if(term.indexOf(".") != -1) {
-    				indexDot = term.indexOf(".");
-    				dot = term.substring(indexDot).split("#")[0];
-    				dot = dot.replace(".",")(?=(\\.[^\\.# ]+)*\\.");
-    				dot = dot + ")";
-    				dot = dot.substring(1);
-    			}
-    			var regex = " " + tagName + hash + dot + "(\\.[^\\.# ]+)*(?=[ ])";
-    			//regex = regex.replace(/\d+/,"\\d+");
-    			var reg = new RegExp(regex,"");
-    			var res = path.match(reg);
-    			
-    			if(res != null) {
-    				path = path.substring(res.index);
-    				if(trim)
-    					path = path.replace(reg,"");
-    			} else {
-    				check = 0;
-    				break;
-    			}
+    	var matches = domGenerator.getMathces(" " + tag,map,false);
+    	console.log(tag);
+    	console.log(map);
+    	console.log(matches);
+    	for (var i in map) {
+    		var node = map[i];
+    	//	console.log(matches);
+    	//	console.log(node);
+    	//	console.log(matches.indexOf(node));
+    		if(matches.indexOf(node) != -1) {
+    			console.log(map2[i]);
+    			document.getElementById(map2[i]).className = "highlight";
+    		} else {
+    		//		console.log(map);
+    		//		document.getElementById("selector-"+i).className = "";
     		}
-    		if(check == 1)
-    			matches.push(path);
     	}
-    	return matches;
+    	/*var covers = document.getElementsByClassName("cover");
+    	
+    	var out = '';
+    	for(var i = 0; i < covers.length; i++) {
+    		var cover = covers[i];
+    		var level = cover.id.substring(8);
+    		var count = cover.getElementsByClassName("highlight").length;
+    		out += "DOM Level: " + level + " - <b>"+count+"</b><br />"
+    	}
+    	document.getElementById("info").innerHTML = out;
+    	document.getElementById("info").style.display = "block";  	*/
+    }
+    function removeHighlight() {
+    	for (var i in map) {
+    		var node = map[i];
+    		document.getElementById(map2[i]).className = "pin";
+    	}
+    	
+    	document.getElementById("info").style.display = "none";
+    	
+    }
+    
+    
+    function navigate(newContext) {
+    	context += " " + newContext;
+    	createPage(context,hash, partialDOM.slice(0));
+    	
+    }
+    
+    function navigateAll(newContext) {
+    	context = newContext;
+    	createPage(context,hash, partialDOM.slice(0));
+    	
+    }
+    
+    function navigateConfirm(newContext) {
+    	var cnfrm = confirm("Id selector do not require a DOM sequence, as they are unique in DOM. Selecting this id will clear the previous hierarchy selection. Do you want to continue?");
+    	if(cnfrm == true) {
+	    	context = newContext;
+    		createPage(context,hash, partialDOM.slice(0));
+    	}
+		else
+			return false;
     
     }
     
+    function modify(id) {
+    	path = id;
+	  	context = initialVals[path];
+	  	hash = initialVals[path];
+    	createPage(context,hash, partialDOM.slice(0));
+    
+    }
+    
+    
     function getHierarchy(matches) {
-    	
+    	console.log(matches);
     	var fn = [];
     	for(var i in matches) {
-    		var split = matches[i].substring(1).split(" ");
+    		var split = matches[i].trim().split(" ");
+    		var parent = "left";
     		for(i in split) {
-	    		var temp = split[i];
+	    		var temp = split[i].split("(");
+	    		var append = "";
+	    		if(temp.length > 1) {
+	    			for(k=1; k<temp.length; k++)
+	    				append += "(" + temp[k];
+				}
+	    		temp = temp[0];
 	    		var temp2 = temp.split(".");
 	    		var temp3 = temp2[0];
 	    		//sorting classes alphabetically
 	    		temp2.splice(0,1);
 	    		temp2.sort();
 	    		temp2.splice(0,0,temp3);
-	    		var ins = temp2.join(".").replace("..",".");
+	    		var ins = temp2.join(".").replace("..",".") + append;
     			if(fn[i] == undefined)
 	    			fn[i] = [];
-	    		if(fn[i].indexOf(ins) < 0 && ins != "")
-		    		fn[i].push(ins);
+	    		if(fn[i].indexOf(ins+"|"+parent) < 0 && ins != "")
+		    		fn[i].push(ins+"|"+parent);
+		    	
+		    	parent += "_" + ins.split("(")[0].replace(/\./g,"dot").replace(/\#/g,"hash");
 	    		
     		}
     	}
+    	console.log(fn);
     	return fn;
     }
+    
+    
+    
     
     function getTag(node) {
     	var tag = '';
@@ -291,132 +422,211 @@ div[id^="columns_"] {
     	return classes;
     }
     
-    function highlight(tag) {
+    function showPath(id) {
+    	$(".item").removeClass("current");
+    	$("#item"+id).addClass("current");
+    	$(".detail").removeClass("visible");
+    	$("#path"+id).addClass("visible");
     	
-    	var matches = getMathces(" " + tag,map,false);
-    	console.log(tag);
-    	console.log(map);
-    	console.log(matches);
-    	for (var i in map) {
-    		var node = map[i];
-    	//	console.log(matches);
-    	//	console.log(node);
-    	//	console.log(matches.indexOf(node));
-    		if(matches.indexOf(node) != -1) {
-    			document.getElementById("selector-"+i).className = "highlight";
-    		} else {
-    		//		console.log(map);
-    		//		document.getElementById("selector-"+i).className = "";
+    }
+    function createRight(evals) {
+    	
+    	for(var i=0; i<evals.length; i++) {
+    		
+    		var html = '<div class="item" id="item'+i+'"><input id="selector'+i+'" class="selector" onclick="modify(\''+i+'\')" type="radio" name="selector" /> <a href="javascript:void()" onclick="showPath(\''+i+'\')">Path '+i+'</a></div>';
+    		if(i == 0)
+    			html = '<div class="item current" id="item'+i+'"><input id="selector'+i+'" class="selector" onclick="modify(\''+i+'\')" type="radio" name="selector" checked="checked" /> <a href="javascript:void()" onclick="showPath(\''+i+'\')">Path '+i+'</a></div>';
+    		document.getElementById("r_left").innerHTML += html;
+    		
+    		var obj = evals[i];
+    		
+    		html = '<div class="detail" id="path'+i+'">';
+    		
+    		if(i == 0)
+    			html = '<div class="detail visible" id="path'+i+'">';
+    			
+    		html += '<h3>Sequence</h3><div class="step">Start</div><img src="http://upload.wikimedia.org/wikipedia/en/f/f1/Down_Arrow_Icon.png" class="downarrow" />';
+    		
+    		for(var j=0; j<obj['sequence'].length; j++) {
+    			
+    			var step = obj['sequence'][j].split(" ");
+    			
+    			
+    			var functionName = "In path";
+    			var conditions = new Array();
+    			if(step.length == 2) {
+    				functionName = step[0];
+    				conditions = step[1];    				 
+    			} else {
+    				conditions = step[0];
+    			}
+    			
+    			html += '<div class="step"><b>'+functionName+':</b> '+conditions+'</div>';
+    			html += '<img src="http://upload.wikimedia.org/wikipedia/en/f/f1/Down_Arrow_Icon.png" class="downarrow" />';
     		}
+    		
+    		html += '<div class="step">End</div>';
+    		
+    		html += '<br /><br /><h3>DOM Modifications:</h3>';
+    		html += '<ul>'
+    		
+    		for(var j=0; j<obj['actions'].length; j++) {
+    			html += '<li>';
+    			html += obj['actions'][j].replace(/\#domplete_\d*/g,"").replace(/\(added\)/g,"");
+    			html += '</li>';	
+    		}
+    		
+    		html += '</ul>';
+    		html += '</div>';
+    		document.getElementById("r_right").innerHTML += html;
+    		
+    		
     	}
-    	var covers = document.getElementsByClassName("cover");
-    	
-    	var out = '';
-    	for(var i = 0; i < covers.length; i++) {
-    		var cover = covers[i];
-    		var level = cover.id.substring(8);
-    		var count = cover.getElementsByClassName("highlight").length;
-    		out += "DOM Level: " + level + " - <b>"+count+"</b><br />"
-    	}
-    	document.getElementById("info").innerHTML = out;
-    	document.getElementById("info").style.display = "block";  	
     }
-    function removeHighlight() {
-    	for (var i in map) {
-    		var node = map[i];
-    		document.getElementById("selector-"+i).className = "";
-    	}
-    	
-    	document.getElementById("info").style.display = "none";
-    	
-    }
-    
-    function navigate(path) {
-    	window.location.hash += "/" + path;
-    }
-    
-    function navigateConfirm(path) {
-    	var cnfrm = confirm("Id selector do not require a DOM sequence, as they are unique in DOM. Selecting this id will clear the previous hierarchy selection. Do you want to continue?");
-    	if(cnfrm == true)
-	    	window.location.hash = "#" + hash.substring(1).replace(/\s/g,"/") + "/" + path;
-		else
-			return false;
-    }
-    
-    function create(tag,id,classes,j,counter) {
+    function create(tag,id,classes,j,counter,text,parent,name) {
     	
     	for(var i in classes) {
     		classes[i] = "<a href='javascript:void()' onmouseover=\"highlight('."+classes[i]+"')\" onmouseout='removeHighlight()' onclick=\"navigate('."+classes[i]+"')\">."+classes[i]+"</a>";
     	}
-    	var out = "<div class='pin'><table id='selector-"+counter+"' style='border:solid 1px gray; margin:10px auto; width:80%'><tr>";
-    	out += "<td style='width:33%; text-align:center'><a href='javascript:void()' onmouseover=\"highlight('"+tag+"')\" onmouseout='removeHighlight()' onclick=\"navigate('"+tag+"')\">"+tag+"</a></td>";
-    	out += "<td style='width:33%; text-align:center'><a href='javascript:void()' onmouseover=\"highlight('"+id+"')\" onmouseout='removeHighlight()' onclick=\"navigateConfirm('"+id+"')\">"+id+"</a></td>";
-    	out += "<td style='width:33%; text-align:center'>"+classes.join("<br />")+"</td>";
-    	out += "</tr></table></div>";
-    	document.getElementById("columns_"+j+"").innerHTML += out;
+    	var elem = document.getElementById(parent+'_'+name);
+    	console.log(elem);
     	
+    	if(elem == null) {
+	    	var out = "<div class='pin' id='"+parent+'_'+name+"'><div class='header'>";
+	    	out += "<a href='javascript:void()' onmouseover=\"highlight('"+tag+"')\" onmouseout='removeHighlight()' onclick=\"navigate('"+tag+"')\">"+tag+"</a><br />";
+	    	if(id != "")
+		    	out += "<a href='javascript:void()' onmouseover=\"highlight('"+id+"')\" onmouseout='removeHighlight()' onclick=\"navigateConfirm(' body "+id+"')\">"+id+"</a><br />";
+    	
+	    	if(classes.length > 0)
+		    	out += classes.join("<br />");
+    	
+    		if(text != "") {
+    			out += '<br />' + text; 
+    		}
+    		out += "</div></div><div class='clear'></div>";
+    		map2[counter] = parent + "_" + name;
+    		console.log(parent);
+    		document.getElementById(parent).innerHTML += out;
+    		return true;
+    	} else {
+    		var holder = elem.getElementsByClassName("header")[0];
+    		holder.innerHTML += '<br />' + text;
+    		return false;
+    	}
     	
     }
     
-    function createPage(context,hash) {
+    
+    function createPage(context,hash, pD) {
     	console.log(context);
     	console.log(hash);
+    	
+    	var selectors = document.getElementsByClassName("selector");
+		console.log(selectors);
+		var createArr = new Array();
+		
+    	
+    //	for(var i=0; i<selectors.length; i++) {
+	//		var checked = selectors[i].checked;
+	//		if(checked) {
+				var actions = evals[path]['actions'];
+				
+				for(var j=0; j<actions.length; j++) {
+					var action = actions[j];
+					
+					if(action.startsWith('create')) {
+						//console.log(match(" body " + action.substring(7),pD));
+						pD.push(domGenerator.match(" body " + action.substring(7),pD).replace(/\(added\)/g,"(Added_in_Path_"+path+")").replace(/\(expected\)/g,"(Expected_in_Path_"+path+")"));
+						//pD.push(" body " + action.substring(7).replace(/\(added\)/g,"(Added_in_Path_"+i+")"));
+  					}
+  					
+  					if(action.startsWith('remove')) {
+						pD = domGenerator.removeElement(pD,action.substring(7),path);
+  					}
+				}
+	//		}
+	//	}
+		
+    	
+    	
     	var navigator = document.getElementById("navigator");
+    	console.log(context);
+    	console.log(hash);
+    	
     	var contextArr = context.substring(hash.length).substring(1).split(" ");
-    	var c = "";
-    	var out = '<a href="#'+hash.substring(1).replace(/\s/g,"/")+'"><img src="https://www.thearc.org/image/fusion/house-icon.png" height="13" /></a>';
+    	var c = hash;
+    	var out = '<a href="javascript:void(0)" onclick="navigateAll(\''+c+'\')"><img src="https://www.thearc.org/image/fusion/house-icon.png" height="13" /></a>';
     	for(var i in contextArr) {
-    		c += contextArr[i];
-	    	out += ' > <a href="#'+c+'">'+contextArr[i]+'</a>';
-	    	c += "/";
+    		c += " " + contextArr[i];
+	    	out += ' > <a href="javascript:void(0)" onclick="navigateAll(\''+c+'\')">'+contextArr[i]+'</a>';
 	    }
     	
     	navigator.innerHTML = out;
     	
-    	document.getElementById("placeholder").innerHTML = "";
+    	document.getElementById("left").innerHTML = "";
     	
-    	var dom = getHierarchy(getMathces(context,partialDOM));
+    	console.log(pD);
+    	console.log(context);
+    	var dom = getHierarchy(domGenerator.getMathces(context,pD));
+    	console.log(dom);
     	var counter = 0;
     	map = [];
+    	map2= [];
     	for(var j in dom) {
 			var nodes = dom[j];
-			document.getElementById("placeholder").innerHTML += '<div id="wrapper_'+parseInt(parseInt(j)+1)+'" class="cover"><h1 style="width:90%; text-align:center; margin:0px auto">DOM Level '+parseInt(parseInt(j)+1)+'</h1><div id="columns_'+j+'"></div></div>';
+			//document.getElementById("left").innerHTML += '<div id="wrapper_'+parseInt(parseInt(j)+1)+'" class="cover"><h1 style="width:90%; text-align:center; margin:0px auto">DOM Level '+parseInt(parseInt(j)+1)+'</h1><div id="columns_'+j+'"></div></div>';
 	    	for(var i in nodes) {
-	    		var node = nodes[i];
+	    		var node = nodes[i].split("|")[0];
+	    		var parent = nodes[i].split("|")[1];
+	    		
+	    		var temp = node.split("(");
+				node = temp[0];
+	    		var text = "";
+	    		if(temp.length > 1) {
+	    			for(var k=1; k<temp.length; k++)
+	    				text += "(" + temp[k].replace(/\_/g," ");
+	    		}
 	    		var tag = getTag(node);
     			var id = getID(node);
     			var classes = getClasses(node); 
     		//	console.log(tag);
     		//	console.log(id);
     		//	console.log(classes);
-    			create(tag,id,classes,j,counter);
-    			map[counter] = " " + node + " ";
-    			counter++;
+    			var test = create(tag,id,classes,j,counter,text,parent,node.replace(/\./g,"dot").replace(/\#/g,"hash"));
+    			if(test) {
+	    			map[counter] = " " + node + " ";
+    				counter++;
+    			}
     		}
     	}
     }
     
-    function update() {
-    	var temp = " " + window.location.hash.substring(1).replace(/\//g, " ");
-    	if(temp != context) {
-    		context = temp;
-    		createPage(context,hash);
-    	}
-    }
+
     
-    var partialDOM = readFile("reduced.txt");
-	partialDOM = partialDOM.split("\n");
-  	var map = new Array();
-  	var context = " " + window.location.hash.substring(1).replace(/\//g, " ");
-    var hash = context;
-    console.log(context);
+    var map = new Array();
+    var map2 = new Array();
     
-    
-    createPage(context,hash);
-    
-    setInterval("update()",1000);
-    
-    
+  	var path = 0;
+  	var incompleteCode = window.opener.incompleteCode;
+  	var evals = window.opener.evals;
+  	var initialVals = window.opener.initialVals;
+  	console.log(initialVals);
+  	var context = initialVals[path];//" body";
+  	var hash = initialVals[path];//" body";
+  	console.log(incompleteCode);
+  	console.log(evals);
+  	createRight(evals);
+  	createPage(context,hash, partialDOM.slice(0));
+
+  	window.modify = modify;
+  	window.domGenerator = domGenerator;
+  	window.highlight = highlight;
+  	window.removeHighlight = removeHighlight;
+  	window.navigateConfirm = navigateConfirm;
+  	window.navigate = navigate;
+  	window.navigateAll = navigateAll;
+  	window.showPath = showPath;
+    });
     
         
 </script>
