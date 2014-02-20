@@ -1,0 +1,231 @@
+%-----------------------------------------------------------------------------
+%
+%               Template for sigplanconf LaTeX Class
+%
+% Name:         sigplanconf-template.tex
+%
+% Purpose:      A template for sigplanconf.cls, which is a LaTeX 2e class
+%               file for SIGPLAN conference proceedings.
+%
+% Guide:        Refer to "Author's Guide to the ACM SIGPLAN Class,"
+%               sigplanconf-guide.pdf
+%
+% Author:       Paul C. Anagnostopoulos
+%               Windfall Software
+%               978 371-2316
+%               paul@windfall.com
+%
+% Created:      15 February 2005
+%
+%-----------------------------------------------------------------------------
+
+
+\documentclass{sigplanconf}
+
+% The following \documentclass options may be useful:
+
+% preprint      Remove this option only once the paper is in final form.
+% 10pt          To set in 10-point type instead of 9-point.
+% 11pt          To set in 11-point type instead of 9-point.
+% authoryear    To obtain author/year citation style instead of numeric.
+
+\usepackage{pslatex}
+\usepackage{hyperref}
+\usepackage{url,moreverb,graphicx}
+\usepackage{ifthen}
+\usepackage{amssymb}
+\usepackage{listings}
+\usepackage{xspace}
+\usepackage{rotating}
+\usepackage{fixmath}
+%\usepackage{relsize}
+\usepackage{mdwlist}
+%\usepackage{enumitem}
+%\usepackage{paralist}
+\usepackage{pseudocode}
+\usepackage[lined,boxruled]{algorithm2e}
+%\usepackage{algorithm2e}
+\usepackage{theorem}
+\usepackage{amsmath}
+\usepackage{comment}
+\usepackage{multirow}
+ \let\labelindent\relax
+\usepackage{enumitem}
+%\setlist[itemize]{noitemsep}
+%\setlist[description]{noitemsep}
+%\setlist[enumerate]{noitemsep}
+
+\usepackage{float}
+%\usepackage{floatflt}
+%\usepackage[small,it]{caption} %reduces the size of captions under tables and figures.
+\usepackage{subfigure}
+%\usepackage{fancybox}
+\usepackage{mdframed}
+\usepackage{shadow}
+\usepackage{balance}
+\usepackage{pifont}% http://ctan.org/pkg/pifont
+\newcommand{\cmark}{\ding{51}\xspace}%
+\newcommand{\xmark}{\ding{55}\xspace}%
+
+\usepackage{color}
+\usepackage{textcomp}
+
+\usepackage{quoting}
+
+
+
+\begin{document}
+
+\special{papersize=8.5in,11in}
+\setlength{\pdfpageheight}{\paperheight}
+\setlength{\pdfpagewidth}{\paperwidth}
+
+\conferenceinfo{CONF 'yy}{Month d--d, 20yy, City, ST, Country} 
+\copyrightyear{20yy} 
+\copyrightdata{978-1-nnnn-nnnn-n/yy/mm} 
+\doi{nnnnnnn.nnnnnnn}
+
+% Uncomment one of the following two, if you are not going for the 
+% traditional copyright transfer agreement.
+
+%\exclusivelicense                % ACM gets exclusive license to publish, 
+                                  % you retain copyright
+
+%\permissiontopublish             % ACM gets nonexclusive license to publish
+                                  % (paid open-access papers, 
+                                  % short abstracts)
+                                  
+\newcommand\kartik[1]{\nb{Kartik}{#1}}
+\newcommand\karthik[1]{\nb{Karthik}{#1}}
+\newcommand\ali[1]{\nb{Ali}{#1}}
+
+
+%% short keys
+\newcommand{\ajax}{\textsc{Ajax}\xspace}
+\newcommand{\webtwo}{\textit{Web~2.0}\xspace}
+\newcommand{\crawljax}{\textsc{Crawljax}\xspace}
+\newcommand{\etal}{{et al.}\xspace}
+\newcommand{\ie}{{i.e.,}\xspace}
+\newcommand{\eg}{{e.g.,}\xspace}
+\newcommand{\html}{{HTML}\xspace}
+\newcommand{\htmlfive}{{HTML5}\xspace}
+\newcommand{\javascript}{{Java\-Script}\xspace}
+\newcommand{\css}{\textsc{CSS}\xspace}
+\newcommand{\cssthree}{\textsc{CSS3}\xspace}
+
+\newcommand{\headbf}[1]{\medskip\noindent\textbf{#1.}}
+
+\newcommand{\head}[1]{\par\smallskip\noindent\textbf{#1.}}
+
+%% abbreviations and commands
+\newcommand{\secref}[1]{Section~\ref{Sec:#1}}
+\newcommand{\figref}[1]{Figure~\ref{Fig:#1}}
+\newcommand{\listref}[1]{Listing~\ref{List:#1}}
+\newcommand{\tabref}[1]{Table~\ref{Table:#1}}
+\newcommand{\algref}[1]{Algorithm~\ref{Alg:#1}}
+\newcommand{\curl}[1]{\footnote{~\scriptsize\url{#1}}}
+\newcommand{\fn}[1]{\footnote{~\scriptsize{#1}}}
+\newcommand{\code}[1]{{\texttt{#1}}}
+%\newtheorem{mydef}{Definition}
+\newcommand{\aff}[1]{{\normalsize \textsl{#1}}}
+
+\newcounter{fcounter}
+\newcommand\finding[1]{\refstepcounter{fcounter} \vspace{4pt}\shabox{\noindent\emph{\textbf{Finding \#\arabic{fcounter}}: #1}}\vspace{4pt}}
+
+%Listings for JS
+\definecolor{lightgray}{rgb}{.9,.9,.9}
+\definecolor{darkgray}{rgb}{.4,.4,.4}
+\definecolor{purple}{rgb}{0.65, 0.12, 0.82}
+
+\lstdefinelanguage{JavaScript}{
+  keywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break},
+  keywordstyle=\color{blue}\bfseries,
+  ndkeywords={class, export, boolean, throw, implements, import, this},
+  ndkeywordstyle=\color{darkgray}\bfseries,
+  identifierstyle=\color{black},
+  sensitive=false,
+  comment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  commentstyle=\color{purple}\ttfamily,
+  stringstyle=\color{red}\ttfamily,
+  morestring=[b]',
+  morestring=[b]"
+}
+\lstset{
+   language=JavaScript,
+   backgroundcolor=\color{lightgray},
+   extendedchars=true,
+   basicstyle=\scriptsize\ttfamily,
+   showstringspaces=false,
+   showspaces=false,
+   numbers=left,
+   numberstyle=\tiny,
+   numbersep=-6pt,
+   tabsize=2,
+   breaklines=true,
+   showtabs=false,
+   captionpos=b,
+   frame=single
+}
+
+
+\titlebanner{banner above paper title}        % These are ignored unless
+\preprintfooter{short description of paper}   % 'preprint' option specified.
+
+\title{Dompletion: DOM Based Auto-Completion}
+%\subtitle{Subtitle Text, if any}
+
+\authorinfo{Kartik Bajaj\and Karthik Pattabiraman\and Ali Mesbah}
+	{University of British Columbia\\ Vancouver, BC, Canada}
+           {\{kbajaj, karthikp, amesbah\}@ece.ubc.ca}
+
+\maketitle
+
+\input{abstract}
+\category{CR-number}{subcategory}{third-level}
+
+% general terms are not compulsory anymore, 
+% you may leave them out
+%\terms
+%term1, term2
+
+\keywords
+JavaScript, Code-Completion, Static Analysis, DOM
+
+\input{introduction}
+\input{motivation}
+\input{approach}
+\input{implementation}
+\input{evaluation}
+\input{discussion}
+\input{related}
+\input{future}
+
+
+
+%\appendix
+%\section{Appendix Title}
+
+%This is the text of the appendix, if you need one.
+
+%\acks
+
+%Acknowledgments, if needed.
+
+% We recommend abbrvnat bibliography style.
+
+\bibliographystyle{abbrvnat}
+
+%\bibliographystyle{abbrv}
+\bibliography{bibfile}
+
+
+\end{document}
+
+%                       Revision History
+%                       -------- -------
+%  Date         Person  Ver.    Change
+%  ----         ------  ----    ------
+
+%  2013.06.29   TU      0.1--4  comments on permission/copyright notices
+
