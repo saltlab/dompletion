@@ -58,11 +58,11 @@
 	
 	The web application pertaining to \figref{Example} consists of a navigation menu with id \texttt{site-navigtion} at the top of the web page. The navigation menu contains one \texttt{h3} element and one \texttt{ul} element that contains some \texttt{li} elements that constitute the menu items. The menu is enabled when class \texttt{toggled-on} is added to the \texttt{h3} and \texttt{ul} elements and disabled otherwise. \figref{Layout} represents the layout of the subset of web page that the \javascript code in \figref{Example} is interacting with.
 	
-	The \javascript code first points references to various DOM elements (Line 7-10). The code then checks for the existence of certain DOM elements and returns if these elements are not present in DOM (Line 11-18). If the elements are present, the code then attaches an \texttt{onclick} event handler to the \texttt{h3} element (Line 20) which when clicked enables / disables the navigation menu by adding and removing the class \texttt{toggled-on} (Line 24 to 30). The code also makes sure that the class \texttt{nav-menu} is attached to the \texttt{ul} element (Line 21-22). The \javascript code assumes that the DOM structure of the web page always contains the element with id \texttt{site-navigation} where the existence of \texttt{h3} and \texttt{ul} elements is not mandatory within the element with id \texttt{site-navigation}.
+	The \javascript code first points references to various DOM elements (Line 7-10). The code then checks for the existence of certain DOM elements and returns if these elements are not present in DOM (Line 11-18). If the elements are present, the code then attaches an \texttt{onclick} event handler to the \texttt{h3} element (Line 20) which when clicked enables / disables the navigation menu by adding and removing the class \texttt{toggled-on} (Line 24 to 30). The code also makes sure that the class \texttt{nav-menu} is attached to the \texttt{ul} element (Line 21-22). The \javascript code assumes that the DOM structure of the web page always contains the element with id \texttt{site-navigation}. Whereas the existence of \texttt{h3} and \texttt{ul} elements is not mandatory within the element with id \texttt{site-navigation}.
 	
 	The \javascript code in \figref{Example} throws a null pointer error if navigation wrapper markup is removed from web page header.\footnote{\url{https://core.trac.wordpress.org/ticket/22307}} This error points to the fact that the programmer always assumed the presence of navigation menu in the web page and was not aware of the situation when this menu can be missing from the web page. To avoid this null pointer error a fix was suggested to exit the function if the navigation menu is not present on the web page. \figref{Fix} represents the suggested fix for the above mentioned error.
 	
-	We note that the error arises due to the lack of complete knowledge about the possible DOM states by the developer. To eliminate such errors the programmers need tools that can analyze possible DOM structures and provide suggestions to the developer. However, once different possible DOM states has been analyzed the fix for the above error is straight forward.
+	We note that the error arises due to the lack of complete knowledge about the possible DOM states to the developer. To eliminate such errors the developers need tools that can analyze possible DOM structures and provide suggestions to the developer. Once different possible DOM states have been analyzed the fix for the above error is straight forward.
 	
 	
 	\begin{figure}
@@ -103,18 +103,27 @@
 	\subsection{Scope of the paper}
 	\label{Sec:Scope}
 	
-	Prior work  has shown the prevalence of \javascript errors in the production websites.\cite{ocariza2011javascript} Further analysis revealed the presence of DOM related errors within \javascript code.\cite{ocariza2013empirical} There we choose to provide auto-complete suggestions for the DOM interactions within \javascript code. In this work we focus on 4 different methods within the DOM API that can be used to point references to the DOM elements.
+	Prior work  has shown the prevalence of \javascript errors in the production websites.\cite{ocariza2011javascript} Further analysis revealed the presence of DOM related errors within \javascript code.\cite{ocariza2013empirical} Therefore we choose to provide auto-complete suggestions for the DOM interactions within \javascript code. 
 	
-	\begin{enumerate}
-		
-		\item \textbf{document.getElementById} 
-		\item \textbf{document.querySelector} \\ \textbf{element.querySelector}
-		\item \textbf{document.getElementsByClassName} \\ \textbf{element.getElementsByClassName}
-		\item \textbf{document.getElementsByTagName} \\ \textbf{element.getElementsByTagName}
-		
-	\end{enumerate}
+	\begin{table}
+	{
+		\scriptsize
+		\begin{tabular}{ p{3.8cm} | p{3.8cm}}
+  			\hline                        
+  			\textbf{Function} & \textbf{Calling Objects} \\ \hline \hline
+  			\texttt{getElementById()} & \texttt{document} \\ \hline
+			\texttt{querySelector()} & \texttt{document, element} \\ \hline
+			\texttt{getElementsByClassName()} & \texttt{document, element} \\ \hline
+			\texttt{getElementsByTagName()} & \texttt{document, element} \\
+  			\hline  
+		\end{tabular}
+	}
+	\caption {DOM API for fetching DOM elements}
+	\label{Table:API}		
+	\end{table}
+
 	
-	\texttt{getElementById} function can only be called by the \texttt{document} object whereas the later 3 functions can also be called by any element within the DOM hierarchy, therefore making it possible to access any element within the DOM.
+	In this work we focus on 4 different methods within the DOM API that can be used to point references to the DOM elements. \tabref{API} provides the list of functions used to access the DOM elements. \texttt{getElementById} function can only be called by the \texttt{document} object whereas the later 3 functions can also be called by any element within the DOM hierarchy, therefore making it possible to access any element within the DOM.
 	
 	
 	
