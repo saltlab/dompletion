@@ -22,10 +22,10 @@
 			\caption{DOM Analysis}
 			\label{Fig:DOM-Analysis}
 		\end{figure}
-		In the DOM analysis phase, the corresponding web application is crawled (Step 2) using Crawljax \cite{crawljax:tweb12} to collect information about the DOM hierarchy. The information about DOM hierarchy is then stored in the form of \css selectors\footnote{\css selectors are the patterns used to select particular DOM element} (Step 3). Each leaf node in the DOM is expressed as a sequence of tag name, id's and classnames found in the hierarchy. As the number of DOM states within the website can be infinite, a timeout limit is set by the user. When one particular DOM state is stored in the form of \css selectors, the crawler moves to the next state. The process is continued until the timeout limit is reached (Step 4). Once the timeout has reached, the \css selectors generated from different DOM states are combined (Step 5) to generate a superset of \css selectors which are then used in the later phase.
+		In the DOM analysis phase, the corresponding web application is crawled (Step 2) using Crawljax \cite{crawljax:tweb12} to collect information about the DOM hierarchy and is then stored in the form of \css selectors\footnote{\css selectors are the patterns used to select particular DOM element} (Step 3). Each leaf node in the DOM is expressed as a sequence of tag name, id's and classnames found in the hierarchy. As the number of DOM states within the website can be infinite, a timeout limit is set by the user. When one particular DOM state is stored in the form of \css selectors, the crawler moves to the next state. The process is continued until the timeout limit is reached (Step 4). Once the timeout has reached, the \css selectors generated from different DOM states are combined (Step 5) to generate a superset of \css selectors which are then used in the later phase.
 		
 		\headbf{Converting DOM to \css Representation}
-		Every element within the DOM hierarchy can be addressed as a space separated sequence of nodes beginning from the root node. Each node is a DOM element and can be represented as a combination of tag name, id and list of classes attached to the element. For example for \figref{Example} the \texttt{li} elements can be represented as follows:
+		Every element within the DOM hierarchy can be addressed as a space separated sequence of nodes beginning from the root node. Each node is a DOM element and can be represented as a combination of tag name, id and list of classes attached to the element. For example for \figref{Layout} the \texttt{li} elements can be represented as follows:
 			
 		\begin{quote}
 			\texttt{div\#site-navigation ul.nav-menu.toggled-on li}
@@ -34,14 +34,15 @@
 		To represent complete DOM tree in terms of \css selectors, we focus on all the leaf nodes within the tree, \ie the elements within DOM that does not have any child element. For every leaf node we generate a sequence of its \css selectors, therefore covering all the DOM elements present within the DOM tree. The list of \css selectors for each DOM state are then accumulated together to generate a superset of \css selector strings. The \css representation of the DOM tree for a single DOM state holds the following properties:
 		\begin{itemize}
 			 \item Each word represents a node in the DOM tree with a combination of tag name(required), class name(if present) and id(if present).
-			 \item Each row starts with the root element and traverses to one of the leaf nodes i.e each row represents one path from root node to leaf nodes.			\item Number of rows is equal to number of leaf nodes.
+			 \item Each row starts with the root element and traverses to one of the leaf nodes i.e each row represents one path from root node to leaf nodes.
+			\item Number of rows is equal to number of leaf nodes.
 			 \item Number of words in each string represents the depth of particular path
 		\end{itemize}
 		
 		As the number of crawled DOM states increases, the number of rows in the \css representation increases exponentially, therefore increasing the space and time complexity of the approach. To effectively provide code-completion suggestions within a decent time frame, we need to minimize the \css representation of the superset that is generated after the timeout is reached.
 		
 		\begin{description}
-			\item[Removing duplicates from \css Representation]
+			\item[Removing duplicates]
 			The two leaf nodes in the DOM tree that follow exactly similar DOM hierarchy \ie they have exactly same \css representation, we can remove one of them. For example in \figref{Example} the 2 \texttt{li} elements follows same DOM hierarchy therefore we can consider only one of them for the analysis.
 		
 			\item[Combining Similar IDs]
@@ -79,15 +80,15 @@
 
 			For example:
 			\begin{quote}
-				\texttt{ul.nav-menu.toggled-on li.item1}
+				\texttt{ul\#nav-menu.toggled-on li.item1}
 	
-				\texttt{ul.nav-menu.toggled-on li.item2}
+				\texttt{ul\#nav-menu.toggled-on li.item2}
 			\end{quote}
 
 			In the above two sequences, distance between root node and leaf node for the both the sequences is 1, tag sequence for the sequences is \texttt{ul li}. Ids attached to each element are exactly same. With the approach similar to the previous case the new sequence is generated.
 
 			\begin{quote}
-				\texttt{ul.nav-menu.toggled-on li.item1.item2}
+				\texttt{ul\#nav-menu.toggled-on li.item1.item2}
 			\end{quote}
 		
 		\end{description}
@@ -102,6 +103,86 @@
 			\caption{Code Analysis}
 			\label{Fig:Code-Analysis}
 		\end{figure}
+		
+		In the Code Analysis phase, the \javascript code available within the editor is parsed to extract function definitions (Step 6) and the executing code segment (Step 7). Both the function definition and the executing code segment are then modified to replace the \texttt{if} conditions (Step 8) generating a maximum of $2^n$ different versions, where n is the number of \texttt{if} conditions within that code segments. For each new code path, relevant log statements are inserted within the code to keep track of the code path (Step 9). Based on the executing code segment, calls are made to each version of function definition therefore covering all the possible code paths (Step 10). This execution of \javascript code is performed in a the secure environment (Step 11) with dummy functions being returned for calls to \texttt{document} or \texttt{window} objects, as well as it intercepts these calls (Step 12) for analysis purpose. The logs generated after the code execution are then analyzed (Step 13) and a list of DOM elements referred in the code is generated. The results of this analysis are used as an input for the next phase.
+		
+		The entire execution of the code is wrapped in \texttt{try-catch} block to avoid any run-time error. It is highly likely to have syntax errors in the under development code. Such errors when encountered are reported to the user for the purpose of correction. Therefore, our approach also catches a large number of errors at the beginning stage only.
+		
+		
+		\begin{figure}
+			\medskip
+			\begin{lstlisting}
+	( function() {
+		var nav = document.getElementById( 'site-navigation' ), button, menu;
+		
+		button = nav.getElementsByTagName( 'h3' )[0];
+		menu   = nav.getElementsByTagName( 'ul' )[0];
+
+		! button;
+		dompleteLog("func1 T","");
+		
+		return;
+	} )();
+			\end{lstlisting}
+			\caption{One possible code path within the executing code}
+			\label{Fig:Path}
+			\end{figure}
+			
+			
+			\begin{figure}
+			\medskip
+			\begin{lstlisting}
+	create #site-navigation, 
+	local nav|#site-navigation, 
+	create #site-navigation h3, 
+	local button|#site-navigation h3, 
+	create #site-navigation ul, 
+	local menu|#site-navigation ul, 
+	func1 T 
+			\end{lstlisting}
+			\caption{Logs generated after path execution}
+			\label{Fig:Logs}
+			\end{figure}
+			
+		
+		\headbf{Replace \texttt{if} conditions}
+		When writing code, different actions are performed based on different decisions. Conditional statements like \texttt{if else} are used in the code to indicate these decisions. Each decision creates a new branch within the code therefore increasing the possible number of code paths that can be followed within the code. To provide auto-complete feature, we need to analyze every possible path within the available \javascript code.
+		
+		These conditions are removed recursively from the code, where each recursion results in 2 different versions of the code and then recursively performing the same task on the new versions. The process is continued until all the conditions are removed from the code. The conditional statement within the \texttt{if} condition will always be executed irrespective of what path does the code takes at that point. In addition to this, log statements are inserted to keep track of the code path followed within that version of code.
+		
+		For the example given in \figref{Example}, when the developer is trying to access the code-completion functionality while adding new code in the end, there is one function defined from Line 6-32, with the call to the defined function at Line 32. The executing code segment would be Line 32 followed by the code execution in the function. A total of 16 different code paths are generated and the results for the code-completion will reflect all these paths. \figref{Path} represents one possible code path. The logs generated after executing this code path are presented in \figref{Logs}.	
+		
+		
+		\headbf{Execution Environment}
+			\javascript code contains references to global objects available within the browser. These objects can be classified into two main categories: 1) Browser Objects and 2) HTML DOM Objects. Browser objects include window\footnote{\url{http://www.w3schools.com/jsref/obj_window.asp}}, navigator\footnote{\url{http://www.w3schools.com/jsref/obj_navigator.asp}}, screen\footnote{\url{http://www.w3schools.com/jsref/obj_screen.asp}}, history\footnote{\url{http://www.w3schools.com/jsref/obj_history.asp}},  and location\footnote{\url{http://www.w3schools.com/jsref/obj_location.asp}}. HTML DOM objects include document\footnote{\url{http://www.w3schools.com/jsref/dom_obj_document.asp}}, and element\footnote{\url{http://www.w3schools.com/jsref/dom_obj_all.asp}} objects. These objects expose an API that can be used to interact with the browser and the HTML within it. Faulty interactions with these APIs can lead to an unexpected output. Therefore to securely execute the code we need to create a safe execution environment that can prevent these interactions from causing a fault.
+			
+			To securely execute the \javascript code, we redefine functions within these objects and dummy objects are returned based on the return type of the function. We also insert log statements to keep track about when the particular function was called and what were the parameters passed to it. Additional variables are added for the code analysis purpose. \figref{Environment} provides an example where a call to \texttt{getElementById()} function is being intercepted.
+			
+			
+			\begin{figure}
+			\medskip
+			\begin{lstlisting}
+	if(document.getElementById != undefined) { 
+		document._oldGetElementById = document.getElementById; 
+			
+		document.getElementById = function(id) { 
+			var result = document._oldGetElementById(id); 
+				
+			if (!result) { 
+				addInnerHTML(document,"<div id=\'" + id + "\'></div>"); 
+				result = document._oldGetElementById(id); 
+				result = createProxy(result,document.csspath + " #" + id); 
+			} 
+			result.appended = true;
+			result = createProxy(result,document.csspath + " #" + id);
+			dompleteLog("create " + result.csspath,"");
+			return result; 
+		}; 
+	}
+			\end{lstlisting}
+			\caption{Intercepting calls to \texttt{getElementById} function}
+			\label{Fig:Environment}
+			\end{figure}
 	
 	\subsection{Suggestion Generation}
 	\label{Sec:Suggestions}
