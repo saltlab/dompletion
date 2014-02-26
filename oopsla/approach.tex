@@ -5,12 +5,12 @@
 	
 	\subsection{Usage Model}
 	\label{Sec:Model}
-		Because we focus on providing auto-complete for DOM based interactions, we assume that the developer has access to the web application under development. If the developer does not have access to the running web application, we assume that the developer has access to the HTML template of the website. Further, we assume that the JavaScript code within the editor is partially complete. By partially complete we refer to \javascript code that is syntactically correct and all the variables in use are defined and there are no global variables in use.
+		Because we focus on providing auto-complete for DOM based interactions, we assume that the developer has access to the web application under development. If the developer does not have access to the running web application, we assume that the developer has access to the HTML template of the website. Further, we assume that the JavaScript code within the editor is partially complete. By partially complete we refer to \javascript code that is syntactically correct and all the variables in use are defined and there are no global variables in use. The later assumption is based on the fact that usage of global variables within \javascript code is considered as a bad practice.\footnote{\url{http://stackoverflow.com/questions/10525582/why-are-global-variables-considered-bad-practice-javascript}}
 		
 		Our approach is designed to provide code completion suggestions for \javascript-DOM interactions within the \javascript code. The input required from the developer is either of the function calls \texttt{querySelector}, \texttt{getElementById}, \texttt{getElementsByTagName}, or \texttt{getElementsByClassName} and name of the parent object calling these functions.
 	
 	
-		The output of our approach is a list of tag names, id's or classes when the developer is trying to access any DOM element within the \javascript code. The generated list is dependent on 1) \javascript variables in scope 2) Scope of parent element within DOM 3) Additions / deletions made to the DOM within the available code paths.
+		The output of our approach is a list of tag names, id's or class names when the developer is trying to access any DOM element within the \javascript code. The generated list is dependent on 1) \javascript variables in scope 2) Scope of parent element within DOM 3) Additions / deletions made to the DOM within the available code paths.
 	
 	\subsection{DOM Analysis}
 	\label{Sec:DOM-Analysis}
@@ -22,7 +22,7 @@
 			\caption{DOM Analysis}
 			\label{Fig:DOM-Analysis}
 		\end{figure}
-		In the DOM analysis phase, the corresponding web application is crawled (Step 2) using Crawljax \cite{crawljax:tweb12} to collect information about the DOM hierarchy and is then stored in the form of \css selectors\footnote{\css selectors are the patterns used to select particular DOM element} (Step 3). Each leaf node in the DOM is expressed as a sequence of tag name, id's and classnames found in the hierarchy. As the number of DOM states within the website can be infinite, a timeout limit is set by the user. When one particular DOM state is stored in the form of \css selectors, the crawler moves to the next state. The process is continued until the timeout limit is reached (Step 4). Once the timeout has reached, the \css selectors generated from different DOM states are combined (Step 5) to generate a superset of \css selectors which are then used in the later phase.
+		In the DOM analysis phase, the corresponding web application is crawled (Step 2) using Crawljax \cite{crawljax:tweb12} to collect information about the DOM hierarchy and is then stored in the form of \css selectors\footnote{\css selectors are the patterns used to select particular DOM element} (Step 3). Each leaf node in the DOM is expressed as a sequence of tag name, id's and classnames found in the hierarchy. When one particular DOM state is stored in the form of \css selectors, the crawler moves to the next state. As the number of DOM states within the website can be infinite, a timeout limit is set by the user. The process is continued until the timeout limit is reached (Step 4). Once the timeout has reached, the \css selectors generated from different DOM states are combined (Step 5) to generate a superset of \css selectors which are then used in the later phase.
 		
 		\headbf{Converting DOM to \css Representation}
 		Every element within the DOM hierarchy can be addressed as a space separated sequence of nodes beginning from the root node. Each node is a DOM element and can be represented as a combination of tag name, id and list of classes attached to the element. For example for \figref{Layout} the \texttt{li} elements can be represented as follows:
@@ -104,9 +104,9 @@
 			\label{Fig:Code-Analysis}
 		\end{figure}
 		
-		In the Code Analysis phase, the \javascript code available within the editor is parsed to extract function definitions (Step 6) and the executing code segment (Step 7). Both the function definition and the executing code segment are then modified to replace the \texttt{if} conditions (Step 8) generating a maximum of $2^n$ different versions, where n is the number of \texttt{if} conditions within that code segments. For each new code path, relevant log statements are inserted within the code to keep track of the code path (Step 9). Based on the executing code segment, calls are made to each version of function definition therefore covering all the possible code paths (Step 10). This execution of \javascript code is performed in a the secure environment (Step 11) with dummy functions being returned for calls to \texttt{document} or \texttt{window} objects, as well as it intercepts these calls (Step 12) for analysis purpose. The logs generated after the code execution are then analyzed (Step 13) and a list of DOM elements referred in the code is generated. The results of this analysis are used as an input for the next phase.
+		In the Code Analysis phase, the \javascript code available within the editor is parsed to extract function definitions (Step 6) and the executing code segment (Step 7). Both the function definition and the executing code segment are then modified to replace the \texttt{if} conditions (Step 8) generating a maximum of $2^n$ different versions, where $n$ is the number of \texttt{if} conditions within that code segments. For each newly generated code path, relevant log statements are inserted within the code to keep track of the code path (Step 9). Based on the executing code segment, calls are made to each version of function definition therefore covering all the possible code paths (Step 10). This execution of \javascript code is performed in a secure environment (Step 11) with dummy functions being returned for calls to \texttt{document} or \texttt{window} objects, as well as it intercepts these calls (Step 12) for analysis purpose. The logs generated after the code execution are then analyzed (Step 13) and a list of DOM elements referred in the code is generated. The results of this analysis are used as an input for the next phase.
 		
-		The entire execution of the code is wrapped in \texttt{try-catch} block to avoid any run-time error. It is highly likely to have syntax errors in the under development code. Such errors when encountered are reported to the user for the purpose of correction. Therefore, our approach also catches a large number of errors at the beginning stage only.
+		The entire execution of the code is wrapped in \texttt{try-catch} block to avoid any run-time error. It is highly likely to have syntax errors in the under development code. Such errors when encountered are reported to the user for the purpose of correction. Therefore, our approach also catches a large number of errors in the beginning stage only.
 		
 		
 		\begin{figure}
@@ -159,7 +159,7 @@
 			\end{figure}
 			
 		
-		\headbf{Replace \texttt{if} conditions}
+		\headbf{Replacing \texttt{if} conditions}
 		When writing code, different actions are performed based on different decisions. Conditional statements like \texttt{if else} are used in the code to indicate these decisions. Each decision creates a new branch within the code therefore increasing the possible number of code paths that can be followed within the code. To provide auto-complete feature, we need to analyze every possible path within the available \javascript code.
 		
 		These conditions are removed recursively from the code, where each recursion results in 2 different versions of the code and then recursively performing the same task on the new versions. The process is continued until all the conditions are removed from the code. The conditional statement within the \texttt{if} condition will always be executed irrespective of what path does the code takes at that point. In addition to this, log statements are inserted to keep track of the code path followed within that version of code.
@@ -167,12 +167,7 @@
 		For the example given in \figref{Example}, when the developer is trying to access the code-completion functionality while adding new code in the end, there is one function defined from Line 6-32, with the call to the defined function at Line 32. The executing code segment would be Line 32 followed by the code execution in the function. A total of 16 different code paths are generated and the results for the code-completion will reflect all these paths. \figref{Path} represents one possible code path. The first \texttt{if} condition is removed from the code and the code path with \texttt{true} block is executed. Note that the code after Line 7 will not be executed due to the execution of \texttt{return} statement. The logs generated after executing this code path are presented in \figref{Logs}.	
 		
 		
-		\headbf{Execution Environment}
-			\javascript code contains references to global objects available within the browser. These objects can be classified into two main categories: 1) Browser Objects and 2) HTML DOM Objects. Browser objects include window\footnote{\url{http://www.w3schools.com/jsref/obj_window.asp}}, navigator\footnote{\url{http://www.w3schools.com/jsref/obj_navigator.asp}}, screen\footnote{\url{http://www.w3schools.com/jsref/obj_screen.asp}}, history\footnote{\url{http://www.w3schools.com/jsref/obj_history.asp}},  and location\footnote{\url{http://www.w3schools.com/jsref/obj_location.asp}}. HTML DOM objects include document\footnote{\url{http://www.w3schools.com/jsref/dom_obj_document.asp}}, and element\footnote{\url{http://www.w3schools.com/jsref/dom_obj_all.asp}} objects. These objects expose an API that can be used to interact with the browser and the HTML within it. Faulty interactions with these APIs can lead to an unexpected output. Therefore to securely execute the code we need to create a safe execution environment that can prevent these interactions from causing a fault.
-			
-			To securely execute the \javascript code, we redefine functions within these objects and dummy objects are returned based on the return type of the function. We also insert log statements to keep track about when the particular function was called and what were the parameters passed to it. Additional variables are added for the code analysis purpose. \figref{Environment} provides an example where a call to \texttt{getElementById()} function is being intercepted.
-			
-			
+				
 			\begin{figure}
 			\medskip
 			\begin{lstlisting}
@@ -197,6 +192,13 @@
 			\caption{Intercepting calls to \texttt{getElementById} function}
 			\label{Fig:Environment}
 			\end{figure}
+			
+		
+		\headbf{Execution Environment}
+			\javascript code contains references to global objects available within the browser. These objects can be classified into two main categories: 1) Browser Objects and 2) HTML DOM Objects. Browser objects include window\footnote{\url{http://www.w3schools.com/jsref/obj_window.asp}}, navigator\footnote{\url{http://www.w3schools.com/jsref/obj_navigator.asp}}, screen\footnote{\url{http://www.w3schools.com/jsref/obj_screen.asp}}, history\footnote{\url{http://www.w3schools.com/jsref/obj_history.asp}},  and location\footnote{\url{http://www.w3schools.com/jsref/obj_location.asp}}. HTML DOM objects include document\footnote{\url{http://www.w3schools.com/jsref/dom_obj_document.asp}}, and element\footnote{\url{http://www.w3schools.com/jsref/dom_obj_all.asp}} objects. These objects expose an API that can be used to interact with the browser and the HTML within it. Faulty interactions with these APIs can lead to an unexpected output. Therefore to securely execute the code we need to create a safe execution environment that can prevent these interactions from causing a fault.
+			
+			To securely execute the \javascript code, we redefine functions within these objects and dummy objects are returned based on the return type of the function. We also insert log statements to keep track about when the particular function was called and what were the parameters passed to it. Additional variables are added for the code analysis purpose. Every reference to DOM element returned by these re-defined functions contains a property named \texttt{csspath} to keep track of the \css selectors attached to that element. \figref{Environment} provides an example where a call to \texttt{getElementById()} function is being intercepted.
+
 	
 	\subsection{Suggestion Generation}
 	\label{Sec:Suggestions}
@@ -209,6 +211,19 @@
 			\label{Fig:Suggestions}
 		\end{figure}
 		
-		The outputs from the DOM analysis and Code analysis phase are used as an input to the Suggestion generation phase. The references to DOM generated in code analysis phase are matched against the CSS selectors generated in the DOM analysis phase. Anomalies with respect to DOM elements are then highlighted and presented to the user (Step 14). Possible effects of DOM modifications (Step 15-16) within the \javascript code are also analyzed. The results of the analysis are used to generate the possible DOM states and these DOM states are then used to provide code-completion suggestions to the user. The suggestions presented to the user reflect the scope of parent element within the new DOM.
+		The outputs from the DOM analysis and Code analysis phase are used as an input to the Suggestion generation phase. The references to DOM generated in code analysis phase are matched against the CSS selectors generated in the DOM analysis phase. Anomalies with respect to DOM elements are then highlighted and presented to the user (Step 14). Possible effects of DOM modifications (Step 15-16) within the \javascript code are also analyzed. The results of the analysis are used to generate the possible DOM states (Step 17). These DOM states in combination with the input specified in the \secref{Model} are matched using regular expressions (Step 18) to provide code-completion suggestions to the user (Step 19). The suggestions presented to the user reflect the scope of parent element within the new DOM.
+		
+					\begin{figure}
+			\medskip
+			\begin{lstlisting}
+			re1 = /[^#\\. ]*(?=[ \\.#])#site-navigation(\\.[^\\.# ]+)*(\\([^\\)]+\\))*(?=[ ])/;
+			
+			re2 = /h3(#[^#\\. ]+)*(?=[ \\.])(\\.[^\\.# ]+)*(\\([^\\)]+\\))*(?=[ ])/;
+			\end{lstlisting}
+			\caption{First regular expression matches any type of DOM element with \texttt{id=`site-navigation'} and any number of classes attached to it. Second regular expression matches all the \texttt{h3} tags with any id and any number of classes attached to them, within the child elements of the previously matched element.}
+			\label{Fig:RegExp}
+			\end{figure}
+		\headbf{Creating Regular Expressions for matching}
+			All the DOM variables within the \javascript code have an additional property \texttt{csspath} (refer to previous section) attached to them. A regular expression is generated to match the superset of DOM elements within the generated DOM that contains the sequence of \css selectors mentioned in the \texttt{csspath} variable. These DOM elements act as a possible parent for the current code-completion context. All the child elements for these parent elements are the combined to generate code-completion suggestions. \figref{RegExp} represents Regular expressions for the value of \texttt{csspath} variable \ie \texttt{`\#site-navigation h3'} at Line 9 in \figref{Example}.
 		
 		
