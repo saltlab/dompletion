@@ -1,16 +1,16 @@
 \section{Approach}
 \label{Sec:Approach}
 
-	Our DOM based Code-completion approach consists of 3 phases. 1) DOM analysis, 2) Code analysis, and 3) Suggestion generation. The \emph{DOM analysis} phase (\figref{DOM-Analysis}) involves crawling the web application and generate list of \css selectors present within the DOM states. The \emph{Code analysis} phase (\figref{Code-Analysis}) involves analyzing the \javascript code, creating list of in-scope variables and intercepting the DOM API calls that include reading and writing to the DOM. The results from the above two phases are passed to the \emph{suggestion generation} phase (\figref{Suggestions}) and combined to generate list of auto-complete suggestions that are presented to the developer.
+	Our DOM based Code-completion approach consists of 3 phases. 1) DOM analysis, 2) Code analysis, and 3) Suggestion generation. The \emph{DOM analysis} phase (\figref{DOM-Analysis}) involves crawling the web application and generate list of \css selectors present within the DOM states. The \emph{Code analysis} phase (\figref{Code-Analysis}) involves analyzing the \javascript code, creating list of in-scope variables and intercepting the DOM API calls that include reading and writing to the DOM. The results from the above two phases are passed to the \emph{suggestion generation} phase (\figref{Suggestions}) and combined to generate list of auto-complete suggestions that are presented to the developer. The DOM analysis phase is just executed once when the developer begins writing the code whereas Code analysis phases is executed every time when the developer tries to access the code-completion menu.
 	
 	\subsection{Usage Model}
 	\label{Sec:Model}
 		Because we focus on providing auto-complete for DOM based interactions, we assume that the developer has access to the web application under development. If the developer does not have access to the running web application, we assume that the developer has access to the HTML template of the website. Further, we assume that the JavaScript code within the editor is partially complete. By partially complete we refer to \javascript code that is syntactically correct and all the variables in use are defined and there are no global variables in use. The later assumption is based on the fact that usage of global variables within \javascript code is considered as a bad practice.\footnote{\url{http://stackoverflow.com/questions/10525582/why-are-global-variables-considered-bad-practice-javascript}}
 		
-		Our approach is designed to provide code completion suggestions for \javascript-DOM interactions within the \javascript code. The input required from the developer is either of the function calls \texttt{querySelector}, \texttt{getElementById}, \texttt{getElementsByTagName}, or \texttt{getElementsByClassName} and name of the parent object calling these functions.
+		Our approach is designed to provide code completion suggestions for \javascript-DOM interactions within the \javascript code. There is no specific input required form the developer, other than hitting the code-completion menu while writing the code. DOM based code-completion is provided when any of the  functions mentioned in \tabref{API} are written by the developer.
 	
 	
-		The output of our approach is a list of tag names, id's or class names when the developer is trying to access any DOM element within the \javascript code. The generated list is dependent on 1) \javascript variables in scope 2) Scope of parent element within DOM 3) Additions / deletions made to the DOM within the available code paths.
+		The output of our approach is a list of \css selectors which are shown as the developer is typing. The generated list is dependent on 1) \javascript variables in scope 2) Scope of parent element within DOM 3) Additions / deletions made to the DOM within the available code paths.
 	
 	\subsection{DOM Analysis}
 	\label{Sec:DOM-Analysis}
@@ -31,7 +31,7 @@
 			\texttt{div\#site-navigation ul.nav-menu.toggled-on li}
 		\end{quote}
 			
-		To represent complete DOM tree in terms of \css selectors, we focus on all the leaf nodes within the tree, \ie the elements within DOM that does not have any child element. For every leaf node we generate a sequence of its \css selectors, therefore covering all the DOM elements present within the DOM tree. The list of \css selectors for each DOM state are then accumulated together to generate a superset of \css selector strings. The \css representation of the DOM tree for a single DOM state holds the following properties:
+		To represent complete DOM tree in terms of \css selectors, we focus on all the leaf nodes within the tree, \ie the elements within DOM that does not have any child element. For every leaf node we generate a sequence of its \css selectors; therefore covering all the DOM elements present within the DOM tree. The list of \css selectors for each DOM state are then accumulated together to generate a superset of \css selector strings. The \css representation of the DOM tree for a single DOM state holds the following properties:
 		\begin{itemize}
 			 \item Each word represents a node in the DOM tree with a combination of tag name(required), class name(if present) and id(if present).
 			 \item Each row starts with the root element and traverses to one of the leaf nodes i.e each row represents one path from root node to leaf nodes.
@@ -43,7 +43,7 @@
 		
 		\begin{description}
 			\item[Removing duplicates]
-			The two leaf nodes in the DOM tree that follow exactly similar DOM hierarchy \ie they have exactly same \css representation, we can remove one of them. For example in \figref{Example} the 2 \texttt{li} elements follows same DOM hierarchy therefore we can consider only one of them for the analysis.
+			The two leaf nodes in the DOM tree that follow exact DOM hierarchy \ie they have exactly same \css representation, one of them is removed. For example in \figref{Example} the 2 \texttt{li} elements follows same DOM hierarchy therefore we can consider only one of them for the analysis.
 		
 			\item[Combining Similar IDs]
 			Two rows within the \css based representation that follow the following criteria are the combined to form a single row. 
@@ -68,7 +68,6 @@
 				\texttt{ul.nav-menu.toggled-on li\#item1\#item2}
 			\end{quote}
 
-
 			\item[Combining Similar Classes]
 			Two rows within the \css based representation that follow the following criteria are the combined to form a single row. 
 			
@@ -90,6 +89,8 @@
 			\begin{quote}
 				\texttt{ul\#nav-menu.toggled-on li.item1.item2}
 			\end{quote}
+			
+			The resulting \css representations might not result in valid \css selectors (such as having two IDs together is invalid). However, we are using this information for code-completion purpose and not for selecting DOM elements.
 		
 		\end{description}
 	
@@ -162,7 +163,7 @@
 		\headbf{Replacing \texttt{if} conditions}
 		When writing code, different actions are performed based on different decisions. Conditional statements like \texttt{if else} are used in the code to indicate these decisions. Each decision creates a new branch within the code therefore increasing the possible number of code paths that can be followed within the code. To provide auto-complete feature, we need to analyze every possible path within the available \javascript code.
 		
-		These conditions are removed recursively from the code, where each recursion results in 2 different versions of the code and then recursively performing the same task on the new versions. The process is continued until all the conditions are removed from the code. The conditional statement within the \texttt{if} condition will always be executed irrespective of what path does the code takes at that point. In addition to this, log statements are inserted to keep track of the code path followed within that version of code.
+		These conditions are removed recursively from the code, where each recursion results in 2 different versions of the code and then recursively performing the same task on the new versions. The process is continued until all the conditions are removed from the code. The conditional statement within the \texttt{if} condition will always be executed irrespective of what path does the code takes at that point. In addition to this, log statements are inserted to keep track of the code path followed within that version of code. Loop statement such as \texttt{for} and \texttt{while} could also reflect the possible code paths. However in our implementation, if the loop condition is dependent on the DOM, the code within the loop will be executed at least once. Otherwise number of loops will be dependent on the value of variables within the code. We discuss more about loops in the \secref{Limitations}
 		
 		For the example given in \figref{Example}, when the developer is trying to access the code-completion functionality while adding new code in the end, there is one function defined from Line 6-32, with the call to the defined function at Line 32. The executing code segment would be Line 32 followed by the code execution in the function. A total of 16 different code paths are generated and the results for the code-completion will reflect all these paths. \figref{Path} represents one possible code path. The first \texttt{if} condition is removed from the code and the code path with \texttt{true} block is executed. Note that the code after Line 7 will not be executed due to the execution of \texttt{return} statement. The logs generated after executing this code path are presented in \figref{Logs}.	
 		
@@ -216,14 +217,14 @@
 					\begin{figure}
 			\medskip
 			\begin{lstlisting}
-			re1 = /[^#\\. ]*(?=[ \\.#])#site-navigation(\\.[^\\.# ]+)*(\\([^\\)]+\\))*(?=[ ])/;
+		re1 = /[^#\\. ]*(?=[ \\.#])#site-navigation(\\.[^\\.# ]+)*(\\([^\\)]+\\))*(?=[ ])/;
 			
-			re2 = /h3(#[^#\\. ]+)*(?=[ \\.])(\\.[^\\.# ]+)*(\\([^\\)]+\\))*(?=[ ])/;
+		re2 = /h3(#[^#\\. ]+)*(?=[ \\.])(\\.[^\\.# ]+)*(\\([^\\)]+\\))*(?=[ ])/;
 			\end{lstlisting}
 			\caption{First regular expression matches any type of DOM element with \texttt{id=`site-navigation'} and any number of classes attached to it. Second regular expression matches all the \texttt{h3} tags with any id and any number of classes attached to them, within the child elements of the previously matched element.}
 			\label{Fig:RegExp}
 			\end{figure}
 		\headbf{Creating Regular Expressions for matching}
-			All the DOM variables within the \javascript code have an additional property \texttt{csspath} (refer to previous section) attached to them. A regular expression is generated to match the superset of DOM elements within the generated DOM that contains the sequence of \css selectors mentioned in the \texttt{csspath} variable. These DOM elements act as a possible parent for the current code-completion context. All the child elements for these parent elements are the combined to generate code-completion suggestions. \figref{RegExp} represents Regular expressions for the value of \texttt{csspath} variable \ie \texttt{`\#site-navigation h3'} at Line 9 in \figref{Example}.
+			All the DOM variables within the \javascript code have an additional property \texttt{csspath} (refer to previous section) attached to them. A regular expression is generated to match the superset of DOM elements within the generated DOM that contains the sequence of \css selectors mentioned in the \texttt{csspath} variable. These DOM elements act as a possible parent for the current code-completion context. All the child elements for these parent elements are then combined to generate code-completion suggestions. \figref{RegExp} represents regular expressions for the value of \texttt{button.csspath} variable \ie \texttt{`\#site-navigation h3'} at Line 9 in \figref{Example}.
 		
 		
