@@ -56,7 +56,7 @@
 		\label{Fig:Layout}
 	\end{figure}
 	
-	The web application pertaining to \figref{Example} consists of a navigation menu with id \texttt{site-navigtion} at the top of the web page. The navigation menu contains one \texttt{h3} element and one \texttt{ul} element that contains some \texttt{li} elements that constitute the menu items. The menu is enabled when class \texttt{toggled-on} is added to the \texttt{h3} and \texttt{ul} elements and disabled otherwise. \figref{Layout} represents the layout of the subset of web page that the \javascript code in \figref{Example} is interacting with.
+	The web application pertaining to \figref{Example} consists of a navigation menu with id \texttt{site-navigation} at the top of the web page. The navigation menu contains one \texttt{h3} element and one \texttt{ul} element that contains some \texttt{li} elements that constitute the menu items. The menu is enabled when class \texttt{toggled-on} is added to the \texttt{h3} and \texttt{ul} elements and disabled otherwise. \figref{Layout} represents the layout of the subset of web page that the \javascript code in \figref{Example} is interacting with.
 	
 	The \javascript code first points references to various DOM elements (Line 7-10). The code then checks for the existence of certain DOM elements and returns if these elements are not present in DOM (Line 11-18). If the elements are present, the code then attaches an \texttt{onclick} event handler to the \texttt{h3} element (Line 20) which when clicked enables / disables the navigation menu by adding and removing the class \texttt{toggled-on} (Line 24 to 30). The code also makes sure that the class \texttt{nav-menu} is attached to the \texttt{ul} element (Line 21-22). The \javascript code assumes that the DOM structure of the web page always contains an element with id \texttt{site-navigation}. Whereas the existence of \texttt{h3} and \texttt{ul} elements is not mandatory within that element.
 		
@@ -103,7 +103,7 @@
 	\subsection{Scope of the paper}
 	\label{Sec:Scope}
 	
-	Prior work  has shown the prevalence of \javascript errors in the production websites.\cite{ocariza2011javascript} Further analysis revealed the presence of DOM related errors within \javascript code.\cite{ocariza2013empirical} Therefore we choose to provide auto-complete suggestions for the DOM interactions within \javascript code. 
+	Prior work  has shown the prevalence of \javascript errors in the production websites \cite{ocariza2011javascript}. Further analysis revealed the presence of DOM related errors within \javascript code \cite{ocariza2013empirical}. Therefore we choose to provide auto-complete suggestions for the DOM interactions within \javascript code. 
 	
 	\begin{table}
 	{
