@@ -6,7 +6,7 @@
 
 	\subsection{Running Example}
 	\label{Sec:Example}
-	
+			
 	\figref{Example} present an example of \javascript code fragment to illustrate some of the challenges involved in providing auto-complete features for \javascript. The code fragment is based on the real world web application Wordpress.\footnote{\url{https://github.com/WordPress/WordPress/blob/master/wp-content/themes/twentytwelve/js/navigation.js}}
 	
 	\begin{figure}
@@ -55,16 +55,7 @@
 		\caption{Web page layout for the \javascript code}
 		\label{Fig:Layout}
 	\end{figure}
-	
-	The web application pertaining to \figref{Example} consists of a navigation menu with id \texttt{site-navigation} at the top of the web page. The navigation menu contains one \texttt{h3} element and one \texttt{ul} element that contains some \texttt{li} elements that constitute the menu items. The menu is enabled when class \texttt{toggled-on} is added to the \texttt{h3} and \texttt{ul} elements and disabled otherwise. \figref{Layout} represents the layout of the subset of web page that the \javascript code in \figref{Example} is interacting with.
-	
-	The \javascript code first points references to various DOM elements (Line 7-10). The code then checks for the existence of certain DOM elements and returns if these elements are not present in DOM (Line 11-18). If the elements are present, the code then attaches an \texttt{onclick} event handler to the \texttt{h3} element (Line 20) which when clicked enables / disables the navigation menu by adding and removing the class \texttt{toggled-on} (Line 24 to 30). The code also makes sure that the class \texttt{nav-menu} is attached to the \texttt{ul} element (Line 21-22). The \javascript code assumes that the DOM structure of the web page always contains an element with id \texttt{site-navigation}. Whereas the existence of \texttt{h3} and \texttt{ul} elements is not mandatory within that element.
-		
-	The \javascript code in \figref{Example} throws a null pointer error if navigation wrapper markup \ie element with id \texttt{site-navigation} is removed from web page header.\footnote{\url{https://core.trac.wordpress.org/ticket/22307}} This error points to the fact that the programmer was unaware of the situation when this element can be missing from the web page. To avoid this null pointer error a fix was suggested to exit the function if the navigation menu is not present on the web page. \figref{Fix} represents the suggested fix for the above mentioned error.
-	
-	We note that the error arises due to the lack of complete knowledge about the possible DOM states to the developer. To eliminate such errors the developers need tools that can analyze possible DOM structures and provide suggestions to the developer. Once different possible DOM states have been analyzed the fix for the above error is straight forward.
-	
-	
+
 	\begin{figure}
 	\medskip
 	\begin{lstlisting}
@@ -75,7 +66,23 @@
 	\label{Fig:Fix}
 	\end{figure}
 	
+	The web application pertaining to \figref{Example} consists of a navigation menu with id \texttt{site-navigation} at the top of the web page. The navigation menu contains one \texttt{h3} element and one \texttt{ul} element that contains some \texttt{li} elements that constitute the menu items. The menu is enabled when class \texttt{toggled-on} is added to the \texttt{h3} and \texttt{ul} elements and disabled otherwise. \figref{Layout} represents the layout of the subset of web page that the \javascript code in \figref{Example} is interacting with.
 	
+	The \javascript code first points references to various DOM elements (Line 7-10). The code then checks for the existence of certain DOM elements and returns if these elements are not present in DOM (Line 11-18). If the elements are present, the code then attaches an \texttt{onclick} event handler to the \texttt{h3} element (Line 20) which when clicked enables / disables the navigation menu by adding and removing the class \texttt{toggled-on} (Line 24 to 30). The code also makes sure that the class \texttt{nav-menu} is attached to the \texttt{ul} element (Line 21-22). The \javascript code assumes that the DOM structure of the web page always contains an element with id \texttt{site-navigation}. Whereas the existence of \texttt{h3} and \texttt{ul} elements is not mandatory within that element.
+		
+	The \javascript code in \figref{Example} throws a null pointer error if navigation wrapper markup \ie element with id \texttt{site-navigation} is removed from web page header.\footnote{\url{https://core.trac.wordpress.org/ticket/22307}} This error points to the fact that the programmer was unaware of the situation when this element can be missing from the web page. To avoid this null pointer error a fix was suggested to exit the function if the navigation menu is not present on the web page. \figref{Fix} represents the suggested fix for the above mentioned error.
+	
+	We note that the error arises due to the lack of complete knowledge about the possible DOM states to the developer. Also, the relevant \javascript code was focussing on only specific parts of DOM (highlighted in \figref{Structure}), ignoring the rest. Therefore, DOM analysis that targets specific parts of DOM, based on the \javascript code written by the developer can be effective in detecting such errors. To eliminate such errors the developers need tools that can analyze possible DOM structures and provide suggestions to the developer. Once different parts of DOM have been analyzed in every possible DOM state, the fix for the errors similar to above error is straight forward.
+	
+		
+	\begin{figure*}
+%		\begin{mdframed}
+		\centering
+		\includegraphics[width=175mm]{images/layout.png}
+%		\end{mdframed}
+		\caption{Overview of complete DOM Structure for the discussed example}
+		\label{Fig:Structure}
+	\end{figure*}
 	
 	\subsection{JavaScript Code Completion}
 	\label{Sec:Code-completion}

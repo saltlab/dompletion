@@ -1,11 +1,11 @@
 \section{Approach}
 \label{Sec:Approach}
 
-	Our DOM based Code-completion approach consists of 3 phases. 1) DOM analysis, 2) Code analysis, and 3) Suggestion generation. The \emph{DOM analysis} phase (\figref{DOM-Analysis}) involves crawling the web application and generate list of \css selectors present within the DOM states. The \emph{Code analysis} phase (\figref{Code-Analysis}) involves analyzing the \javascript code, creating list of in-scope variables and intercepting the DOM API calls that include reading and writing to the DOM. The results from the above two phases are passed to the \emph{suggestion generation} phase (\figref{Suggestions}) and combined to generate list of auto-complete suggestions that are presented to the developer. The DOM analysis phase is just executed once when the developer begins writing the code whereas Code analysis phases is executed every time when the developer tries to access the code-completion menu.
+	Our DOM based Code-completion approach consists of 3 phases outlined in \figref{Approach}: 1) DOM analysis, 2) Code analysis, and 3) Suggestion generation. The \emph{DOM analysis} phase involves crawling the web application and generate list of \css selectors present within the DOM states. The \emph{Code analysis} phase involves analyzing the \javascript code, creating list of in-scope variables and intercepting the DOM API calls that include reading and writing to the DOM. The results from the above two phases are passed to the \emph{suggestion generation} phase and combined to generate list of auto-complete suggestions that are presented to the developer. The DOM analysis phase is just executed once when the developer begins writing the code whereas Code analysis phases is executed every time when the developer tries to access the code-completion menu.
 	
 	\subsection{Usage Model}
 	\label{Sec:Model}
-		Because we focus on providing auto-complete for DOM based interactions, we assume that the developer has access to the web application under development. If the developer does not have access to the running web application, we assume that the developer has access to the HTML template of the website. Further, we assume that the JavaScript code within the editor is partially complete. By partially complete we refer to \javascript code that is syntactically correct and all the variables in use are defined and there are no global variables in use. The later assumption is based on the fact that usage of global variables within \javascript code is considered as a bad practice.\footnote{\url{http://stackoverflow.com/questions/10525582/why-are-global-variables-considered-bad-practice-javascript}}
+		Because we focus on providing auto-complete for DOM based interactions, we assume that the developer has access to the web application under development. If the developer does not have access to the running web application, we assume that the developer has access to the HTML template of the website. Further, we assume that the JavaScript code within the editor is partially complete. By partially complete we refer to \javascript code that is syntactically correct and all the variables in use are defined and there are no global variables in use. The latter assumption is based on the fact that usage of global variables within \javascript code is considered as a bad practice.\footnote{\url{http://stackoverflow.com/questions/10525582/why-are-global-variables-considered-bad-practice-javascript}}
 		
 		Our approach is designed to provide code completion suggestions for \javascript-DOM interactions within the \javascript code. There is no specific input required form the developer, other than hitting the code-completion menu while writing the code. DOM based code-completion is provided when any of the  functions mentioned in \tabref{API} are written by the developer.
 	
@@ -14,15 +14,16 @@
 	
 	\subsection{DOM Analysis}
 	\label{Sec:DOM-Analysis}
-		\begin{figure}
+		\begin{figure*}
 		%	\begin{mdframed}
 			\centering
-			\includegraphics[width=85mm]{images/dom_analysis.pdf}
+			\includegraphics[width=175mm]{images/approach.pdf}
 		%	\end{mdframed}
-			\caption{DOM Analysis}
-			\label{Fig:DOM-Analysis}
-		\end{figure}
-		In the DOM analysis phase, the corresponding web application is crawled (Step 2) using Crawljax \cite{crawljax:tweb12} to collect information about the DOM hierarchy and is then stored in the form of \css selectors\footnote{\css selectors are the patterns used to select particular DOM element} (Step 3). Each leaf node in the DOM is expressed as a sequence of tag name, id's and classnames found in the hierarchy. When one particular DOM state is stored in the form of \css selectors, the crawler moves to the next state. As the number of DOM states within the website can be infinite, a timeout limit is set by the user. The process is continued until the timeout limit is reached (Step 4). Once the timeout has reached, the \css selectors generated from different DOM states are combined (Step 5) to generate a superset of \css selectors which are then used in the later phase.
+			\caption{Approach}
+			\label{Fig:Approach}
+		\end{figure*}
+		
+		In the DOM analysis phase, the corresponding web application is crawled (Step 1) to collect information about the DOM hierarchy and is then stored in the form of \css selectors\footnote{\css selectors are the patterns used to select particular DOM element} (Step 2). Each leaf node in the DOM is expressed as a sequence of tag name, id's and classnames found in the hierarchy. There list of \css selectors is appended to the existing list (Step 3) and carried forward to the next state. The crawler then checks for left over DOM states for analysis (Step 4). If there are any existing states available the crawler then moves top that [articular state for analysis (Step 2).	 Once all encountered DOM states have been analyzed, the \css selectors generated from different DOM states are combined (Step 5) to generate a superset of \css selectors which are then used in the later phase.
 		
 		\headbf{Converting DOM to \css Representation}
 		Every element within the DOM hierarchy can be addressed as a space separated sequence of nodes beginning from the root node. Each node is a DOM element and can be represented as a combination of tag name, id and list of classes attached to the element. For example for \figref{Layout} the \texttt{li} elements can be represented as follows:
@@ -96,14 +97,6 @@
 	
 	\subsection{Code Analysis}
 	\label{Sec:Code-Analysis}
-		\begin{figure}
-		%	\begin{mdframed}
-			\centering
-			\includegraphics[width=85mm]{images/code_analysis.pdf}
-		%	\end{mdframed}
-			\caption{Code Analysis}
-			\label{Fig:Code-Analysis}
-		\end{figure}
 		
 		In the Code Analysis phase, the \javascript code available within the editor is parsed to extract function definitions (Step 6) and the executing code segment (Step 7). Both the function definition and the executing code segment are then modified to replace the \texttt{if} conditions (Step 8) generating a maximum of $2^n$ different versions, where $n$ is the number of \texttt{if} conditions within that code segments. For each newly generated code path, relevant log statements are inserted within the code to keep track of the code path (Step 9). Based on the executing code segment, calls are made to each version of function definition therefore covering all the possible code paths (Step 10). This execution of \javascript code is performed in a secure environment (Step 11) with dummy functions being returned for calls to \texttt{document} or \texttt{window} objects, as well as it intercepts these calls (Step 12) for analysis purpose. The logs generated after the code execution are then analyzed (Step 13) and a list of DOM elements referred in the code is generated. The results of this analysis are used as an input for the next phase.
 		
@@ -203,14 +196,6 @@
 	
 	\subsection{Suggestion Generation}
 	\label{Sec:Suggestions}
-		\begin{figure}
-		%	\begin{mdframed}
-			\centering
-			\includegraphics[width=85mm]{images/suggestions.pdf}
-		%	\end{mdframed}
-			\caption{Suggestion Generation}
-			\label{Fig:Suggestions}
-		\end{figure}
 		
 		The outputs from the DOM analysis and Code analysis phase are used as an input to the Suggestion generation phase. The references to DOM generated in code analysis phase are matched against the CSS selectors generated in the DOM analysis phase. Anomalies with respect to DOM elements are then highlighted and presented to the user (Step 14). Possible effects of DOM modifications (Step 15-16) within the \javascript code are also analyzed. The results of the analysis are used to generate the possible DOM states (Step 17). These DOM states in combination with the input specified in the \secref{Model} are matched using regular expressions (Step 18) to provide code-completion suggestions to the user (Step 19). The suggestions presented to the user reflect the scope of parent element within the new DOM.
 		
