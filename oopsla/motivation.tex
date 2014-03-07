@@ -49,12 +49,6 @@
 	\label{Fig:Example}
 	\end{figure}	
 	
-	\begin{figure}
-		\centering
-		\includegraphics[width=55mm]{images/layout.pdf}
-		\caption{Web page layout for the \javascript code}
-		\label{Fig:Layout}
-	\end{figure}
 
 	\begin{figure}
 	\medskip
@@ -66,7 +60,7 @@
 	\label{Fig:Fix}
 	\end{figure}
 	
-	The web application pertaining to \figref{Example} consists of a navigation menu with id \texttt{site-navigation} at the top of the web page. The navigation menu contains one \texttt{h3} element and one \texttt{ul} element that contains some \texttt{li} elements that constitute the menu items. The menu is enabled when class \texttt{toggled-on} is added to the \texttt{h3} and \texttt{ul} elements and disabled otherwise. \figref{Layout} represents the layout of the subset of web page that the \javascript code in \figref{Example} is interacting with.
+	The web application pertaining to \figref{Example} consists of a navigation menu with id \texttt{site-navigation} at the top of the web page. The navigation menu contains one \texttt{h3} element and one \texttt{ul} element that contains some \texttt{li} elements that constitute the menu items. The menu is enabled when class \texttt{toggled-on} is added to the \texttt{h3} and \texttt{ul} elements and disabled otherwise. \figref{Structure} represents the layout of the subset of web page that the \javascript code in \figref{Example} is interacting with.
 	
 	The \javascript code first points references to various DOM elements (Line 7-10). The code then checks for the existence of certain DOM elements and returns if these elements are not present in DOM (Line 11-18). If the elements are present, the code then attaches an \texttt{onclick} event handler to the \texttt{h3} element (Line 20) which when clicked enables / disables the navigation menu by adding and removing the class \texttt{toggled-on} (Line 24 to 30). The code also makes sure that the class \texttt{nav-menu} is attached to the \texttt{ul} element (Line 21-22). The \javascript code assumes that the DOM structure of the web page always contains an element with id \texttt{site-navigation}. Whereas the existence of \texttt{h3} and \texttt{ul} elements is not mandatory within that element.
 		
@@ -75,14 +69,31 @@
 	We note that the error arises due to the lack of complete knowledge about the possible DOM states to the developer. Also, the relevant \javascript code was focussing on only specific parts of DOM (highlighted in \figref{Structure}), ignoring the rest. Therefore, DOM analysis that targets specific parts of DOM, based on the \javascript code written by the developer can be effective in detecting such errors. To eliminate such errors the developers need tools that can analyze possible DOM structures and provide suggestions to the developer. Once different parts of DOM have been analyzed in every possible DOM state, the fix for the errors similar to above error is straight forward.
 	
 		
-	\begin{figure*}
+	\begin{figure}
 %		\begin{mdframed}
 		\centering
-		\includegraphics[width=175mm]{images/hierarchy.pdf}
+		\includegraphics[width=85mm]{images/hierarchy.pdf}
 %		\end{mdframed}
-		\caption{Overview of complete DOM Structure for the discussed example}
+		\caption{Overview of the DOM Structure for the discussed example. The variables in the highlighted circle point references to DOM element(s) in \javascript code given in \figref{Example}.}
 		\label{Fig:Structure}
-	\end{figure*}
+	\end{figure}
+	
+	
+	\subsubsection{Code-completion based on DOM}
+	\label{Sec:Code-completion}
+	The above error could have been avoided, if the developer was aware of the possible DOM states while writing the code. Below we discuss the factors that need to be considered in order to analyze the \javascript code and provide meaningful suggestions that can educate the developer with respect to the possible DOM states.
+		
+	\headbf{List of DOM elements}
+	The first and foremost step to provide code-completion based on DOM would be to generate list of DOM elements and present that list to the developer writing the code. The developer can then select the relevant ID, tag name or class name. Minor errors such as typos could be avoided. For the code example given in \secref{Example}, the relevant DOM state contains \textbf{19} different DOM elements with IDs attached to them. The developer can be presented with the list of these IDs when writing code at Line 7, therefore avoiding typing errors.
+	
+	\headbf{Hierarchy of DOM elements}
+	Simply providing a huge list of suggestions might be cumbersome for the developer. Therefore, we need to come up the ways to shorten this list and only provide meaningful suggestions to the developer. The list can be minimized using the hierarchical information about DOM elements. If the hierarchical information is not available; at Line 9 where the developer is trying to access the children of DOM element, a generic list of suggestions will be generated. This list will reflect all the elements present in the DOM tree. Whereas, given the hierarchical information, we can narrow down to the scope of parent element(s) and provide relevant suggestions. For Line 9, with no hierarchical information the number of suggestions would be 23. Whereas, given the required information the number of suggestions can be narrowed down to 5, out of which 3 are immediate children of the element and the rest 2 are decedents. Apparently, 2 out of these 5 suggestions are used by programmer at Line 9 and 10. 
+			
+
+	
+	
+	\headbf{\javascript objects in scope}
+	\javascript code contains references to different DOM elements within the code. For example, \figref{Structure} illustrates the references to DOM pointed by the \javascript variable in the code given in \figref{Example}. Whenever a reference is made to DOM element(s) using any of the functions mentioned in \tabref{API}, the scope of DOM elements is used to narrow down the search space. The parent object (either \texttt{document} or \texttt{element}) maps to a particular DOM element and that element acts as the root node for the search space. However, if this information is missing, we cannot locate the parent element in DOM. Therefore search space always starts from the root node \ie complete DOM tree. For any access to DOM the list of suggestions are generic and the results are similar to the previous case where we do not have the hierarchical information about DOM.
 	
 	\subsection{JavaScript Code Completion}
 	\label{Sec:Code-completion}
