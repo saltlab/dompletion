@@ -14,22 +14,24 @@
 	
 	\subsection{DOM Analysis}
 	\label{Sec:DOM-Analysis}
-		\begin{figure*}
+		\begin{figure}
 		%	\begin{mdframed}
 			\centering
-			\includegraphics[width=175mm]{images/approach.pdf}
+			\includegraphics[width=75mm]{images/overview.pdf}
 		%	\end{mdframed}
 			\caption{Approach}
 			\label{Fig:Approach}
-		\end{figure*}
+		\end{figure}
 		
-		In the DOM analysis phase, the corresponding web application is crawled (Step 1) to collect information about the DOM hierarchy and is then stored in the form of \css selectors\footnote{\css selectors are the patterns used to select particular DOM element} (Step 2). Each leaf node in the DOM is expressed as a sequence of tag name, id's and classnames found in the hierarchy. There list of \css selectors is appended to the existing list (Step 3) and carried forward to the next state. The crawler then checks for left over DOM states for analysis (Step 4). If there are any existing states available the crawler then moves top that [articular state for analysis (Step 2).	 Once all encountered DOM states have been analyzed, the \css selectors generated from different DOM states are combined (Step 5) to generate a superset of \css selectors which are then used in the later phase.
+		In the DOM analysis phase, the corresponding web application is crawled to collect information about the DOM hierarchy and is then stored in the form of \css selectors\footnote{\css selectors are the patterns used to select particular DOM element}. Each leaf node in the DOM is expressed as a sequence of tag name, id's and classnames found in the hierarchy. There list of \css selectors is appended to the existing list and carried forward to the next state. The crawler then checks for left over DOM states for analysis. If there are any existing states available the crawler then moves top that [articular state for analysis.	 Once all encountered DOM states have been analyzed, the \css selectors generated from different DOM states are combined to generate a superset of \css selectors which are then used in the later phase.
 		
 		\headbf{Converting DOM to \css Representation}
-		Every element within the DOM hierarchy can be addressed as a space separated sequence of nodes beginning from the root node. Each node is a DOM element and can be represented as a combination of tag name, id and list of classes attached to the element. For example for \figref{Layout} the \texttt{li} elements can be represented as follows:
+		Every element within the DOM hierarchy can be addressed as a space separated sequence of nodes beginning from the root node. Each node is a DOM element and can be represented as a combination of tag name, id and list of classes attached to the element. For example for \figref{Structure} the \texttt{li} elements can be represented as follows:
 			
 		\begin{quote}
-			\texttt{div\#site-navigation ul.nav-menu.toggled-on li}
+			\texttt{body.home.blog.custom-font-enabled.single-author div\#page.hfeed.site header\#masthead.site-header nav\#site-navigation.main-navigation div.nav-menu ul li.current\_page\_item} \\
+			
+			\texttt{body.home.blog.custom-font-enabled.single-author div\#page.hfeed.site header\#masthead.site-header nav\#site-navigation.main-navigation div.nav-menu ul li.current\_page\_item2}
 		\end{quote}
 			
 		To represent complete DOM tree in terms of \css selectors, we focus on all the leaf nodes within the tree, \ie the elements within DOM that does not have any child element. For every leaf node we generate a sequence of its \css selectors; therefore covering all the DOM elements present within the DOM tree. The list of \css selectors for each DOM state are then accumulated together to generate a superset of \css selector strings. The \css representation of the DOM tree for a single DOM state holds the following properties:
@@ -98,7 +100,7 @@
 	\subsection{Code Analysis}
 	\label{Sec:Code-Analysis}
 		
-		In the Code Analysis phase, the \javascript code available within the editor is parsed to extract function definitions (Step 6) and the executing code segment (Step 7). Both the function definition and the executing code segment are then modified to replace the \texttt{if} conditions (Step 8) generating a maximum of $2^n$ different versions, where $n$ is the number of \texttt{if} conditions within that code segments. For each newly generated code path, relevant log statements are inserted within the code to keep track of the code path (Step 9). Based on the executing code segment, calls are made to each version of function definition therefore covering all the possible code paths (Step 10). This execution of \javascript code is performed in a secure environment (Step 11) with dummy functions being returned for calls to \texttt{document} or \texttt{window} objects, as well as it intercepts these calls (Step 12) for analysis purpose. The logs generated after the code execution are then analyzed (Step 13) and a list of DOM elements referred in the code is generated. The results of this analysis are used as an input for the next phase.
+		In the Code Analysis phase, the \javascript code available within the editor is parsed to extract function definitions and the executing code segment. Both the function definition and the executing code segment are then modified to replace the \texttt{if} conditions generating a maximum of $2^n$ different versions, where $n$ is the number of \texttt{if} conditions within that code segments. For each newly generated code path, relevant log statements are inserted within the code to keep track of the code path. Based on the executing code segment, calls are made to each version of function definition therefore covering all the possible code paths. This execution of \javascript code is performed in a secure environment with dummy functions being returned for calls to \texttt{document} or \texttt{window} objects, as well as it intercepts these calls for analysis purpose. The logs generated after the code execution are then analyzed and a list of DOM elements referred in the code is generated. The results of this analysis are used as an input for the next phase.
 		
 		The entire execution of the code is wrapped in \texttt{try-catch} block to avoid any run-time error. It is highly likely to have syntax errors in the under development code. Such errors when encountered are reported to the user for the purpose of correction. Therefore, our approach also catches a large number of errors in the beginning stage only.
 		
@@ -197,7 +199,7 @@
 	\subsection{Suggestion Generation}
 	\label{Sec:Suggestions}
 		
-		The outputs from the DOM analysis and Code analysis phase are used as an input to the Suggestion generation phase. The references to DOM generated in code analysis phase are matched against the CSS selectors generated in the DOM analysis phase. Anomalies with respect to DOM elements are then highlighted and presented to the user (Step 14). Possible effects of DOM modifications (Step 15-16) within the \javascript code are also analyzed. The results of the analysis are used to generate the possible DOM states (Step 17). These DOM states in combination with the input specified in the \secref{Model} are matched using regular expressions (Step 18) to provide code-completion suggestions to the user (Step 19). The suggestions presented to the user reflect the scope of parent element within the new DOM.
+		The outputs from the DOM analysis and Code analysis phase are used as an input to the Suggestion generation phase. The references to DOM generated in code analysis phase are matched against the CSS selectors generated in the DOM analysis phase. Anomalies with respect to DOM elements are then highlighted and presented to the user. Possible effects of DOM modifications within the \javascript code are also analyzed. The results of the analysis are used to generate the possible DOM states. These DOM states in combination with the input specified in the \secref{Model} are matched using regular expressions to provide code-completion suggestions to the user. The suggestions presented to the user reflect the scope of parent element within the new DOM.
 		
 					\begin{figure}
 			\medskip
