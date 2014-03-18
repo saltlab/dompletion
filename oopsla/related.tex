@@ -1,2 +1,15 @@
 \section{Related Work}
 \label{Sec:Related}
+We classify related work into two broad categories: code-completion and \javascript code analysis.
+
+	\subsection{Code-Completion}
+	\label{Sec:Related1}
+	Several refinements and additions to the code completion menu have previously been suggested in the literature. These have focussed on improving or assessing the quality of code-completion tools. For example, Hou \etal \cite{hou2011evaluation} used hierarchical information to sort list of code-completion suggestions as well as used context based information to filter out invalid suggestions. Bruch \etal \cite{bruch2009learning} mined existing code repositories and used the results to filter and re-order list of suggestions. Robbes \etal \cite{robbes2008program} used program history to assess the quality of code-completion tools. 
+	
+	Prior work has also focussed on providing code-completion based on different forms of input provided by the developer. For example, Brandt \etal \cite{brandt2010example} embedded task specific search engine in IDE that can assist the programmers in finding relevant code on web. Han \etal \cite{han2009code} used Machine learning algorithms to complete code from abbreviations provided by the developer. Little \etal \cite{little2009keyword} used keywords as an input from the programmer to provide code-completion for Java programs. Omar \etal \cite{omar2012active} used graphical methods to provide code-completion for parameters of object initialization methods. Sahavechaphan \etal \cite{sahavechaphan2006xsnippet} developed a framework that can be used by the developers to query a sample repository for code snippets.
+
+	The main difference between these studies and ours is that we focus on providing code-completion for \javascript which is a  loosely typed language. Prior work has focussed on reducing the number of key strokes or assisting the programmers to navigate through the APIs. Whereas our work has focussed on assisting the programmer in understanding the interactions between \javascript and DOM. Because we analyze the DOM states in addition to dynamically evaluating the \javascript code we can track the inconsistencies in the \javascript code with respect to DOM. To the best of our knowledge we are the first one to provide code-completion for DOM based interactions within the \javascript code.
+
+	\subsection{\javascript Code Analysis}
+	\label{Sec:Related2}
+	There has been numerous studies focussed towards analyzing the \javascript code. For example, Jensen \etal \cite{jensen2009type} presented a static program analysis infrastructure that can infer type information for \javascript programs. The approach was purely static therefore not catching run time errors as well as the approach did not consider DOM interactions as well as asynchronous functions.
