@@ -1,0 +1,140 @@
+ body div#feedBody div#feedTitle a#feedTitleLink img#feedTitleImage 
+ body center div#Granny div#maincol div#maincolinner div.partmain div.submenu div.aStory div.titlepart span.dot 
+ body center div#Granny div#slideShow.partmain div.titlepart span#ss_n 
+ body center div#Granny div#slideShow.partmain div.titlepart span.reddot.divClear 
+ body center div#Granny div.wholePhoto.navigation.pvTitle span.title.pvTitleInfo.back2mainR.footnote.titleName.photoTheImg.Commenting a.bottitle.darkdot.oneImageTitle 
+ body center div#Granny div#slideShow.partmain div#ss_info.midInfo span#ss_desc 
+ body center div#Granny div.wholePhoto div#photoBoxes div.photoBox div span.darkdot 
+ body center div#Granny div#maincol div#maincolinner div.partmain div.titlepart.partmain span.reddot.end 
+ body center div#Granny div#maincol div#maincolinner div#slideShow.partmain div.titlepart.midInfo span.reddot.small 
+ body center div#Granny div.wholePhoto div#photoBoxes div.photoBox div span#indicator.dot 
+ body center div#Granny div#sidecol div#sidecolinner div.part div.titlepart.submenu a.reddot 
+ body center div#Granny div.wholePhoto div#photoBoxes div.photoBox div span#rateStatus 
+ body center div#Granny div#slideShow.partmain div div#ss_theend b 
+ body center div#Granny center div.Commenting div#contractComments.bcell 
+ body center div#Granny div.wholePhoto.navigation.pvTitle span.title.pvTitleInfo.back2mainR.footnote.titleName.photoTheImg.Commenting a.bottitle.darkdot.oneImageTitle 
+ body div#feedBody div#feedContent div 
+ body div#feedHeaderContainer div#feedHeader.feedBackground div#feedSubscribeLine 
+ body center div#Granny center div.Commenting div.bcell form table tbody tr td input 
+ body center div#Granny center div.Commenting div.bcell form table tbody tr#ComNameTR td input 
+ body center div#Granny center div.Commenting div.bcell form table tbody tr#ComEmailTR td input 
+ body center div#Granny center div.Commenting div.bcell form table tbody tr#ComWebTR td input 
+ body center div#Granny center div.Commenting div.bcell form table tbody tr#ComWVTR td input#wvinput 
+ body center div#Granny center div.Commenting div.bcell form table tbody tr#ComReplyTR td input#cmntReply 
+ body center div#Granny center div.Commenting div.title a 
+ body center div#Granny center div.Commenting div.bcell form table tbody tr#ComNameTR td 
+ body center div#Granny center div.Commenting div.bcell form table tbody tr#ComWebTR td 
+ body center div#Granny center div.Commenting div.bcell form table tbody tr#ComReplyTR td 
+ body center div#Granny center div.Commenting div.bcell form table tbody tr#ComEmailTR td 
+ body center div#Granny center div.Commenting div.bcell form table tbody tr#ComWVTR td 
+ body center div#Granny div#maincol div#maincolinner div.partmain div.partmain.submenu div.titlepart.aStory div.titlepart.thumbcntarr.end span.dot 
+ body center div#Granny div div.part div.inside div.method div.name span a.submit.q 
+ body center div#Granny div#maincol div#maincolinner div.partmain div.submenu div.aStory div.submenu div.aThumb center a div.thumbDate.thumbNameLine 
+ body center div#Granny div.navigation div.Commenting.aThumb center.title a.leaveReply div.thumbDate.thumbNameLine 
+ body div#feedBody div#feedContent div.entry div.feedEntryContent img 
+ body center div#Granny div#maincol div#maincolinner div.partmain div.titlepart.partmain div.titlepart.thumbcntarr.leaveReply span.reddot 
+ body center div#Granny div#sidecol div#sidecolinner div.part div.submenu div.item br.dot 
+ body center div#Granny div.wholePhoto div.photoTheImg div#theImage a img 
+ body center div#Granny div#slideShow.partmain div.titlepart div#headSlideshow a#ss_link1 span#ss_title 
+ body center div#Granny div#sidecol div#sidecolinner div.part div.submenu div.item span.categeach a span.reddot.categinfo.dot 
+ body center div#Granny div.wholePhoto div#photoBoxes div.photoBox select#rateSelect.rate option 
+ body center div#Granny div#maincol div#maincolinner div.partmain div.partmain div.submenu div.aThumb center a br 
+ body center div#helpBoxContainer.Helping table#helpBox tbody tr td div.fieldCont fieldset legend span#helpBoxLegend 
+ body center div#Granny div#slideShow.partmain div.end 
+ body center div#Granny div.wholePhoto.pvTitle.navigation scriptdt..clearer.bottitle.divClear 
+ body center div#Granny div#slideShow.partmain div#ss_date 
+ body center div#Granny div.wholePhoto script 
+ body center div#Granny div#headerBar a 
+ body center div#Granny div#sidecol div#sidecolinner div.part div.submenu div.item br 
+ body center div#Granny div.wholePhoto.navigation.pvTitle span.title.pvTitleInfo.back2mainR.footnote.titleName.photoTheImg.Commenting a.bottitle.darkdot.oneImageTitle 
+ body center div#Granny div#headerBar span.VeryTitle a.topHeadAround 
+ body center div#Granny div#maincol div#maincolinner div.partmain div.submenu div.aStory.aThumb center.titlepart a img.thumbDate.thumbcntarr.thumbNameLine 
+ body center div#Granny div#maincol div#maincolinner div#slideShow.partmain div.submenu div.aThumb center a div.thumbDate.thumbNameLine 
+ body center div#Granny div.wholePhoto div.photoTheImg div#theImage img 
+ body div#feedBody div#feedTitle div#feedTitleContainer h2#feedSubtitleText 
+ body center div#Granny div#slideShow.partmain div#ss_info.midInfo script 
+ body center div#Granny center div.Commenting div.bcell form table tbody tr#ComReplyTR td span.leaveReply a#viewComment 
+ body center div#Granny center div.Commenting div.bcell form table tbody tr#ComReplyTR td span.leaveReply a 
+ body center div#Granny center div.Commenting div.title span.reddot 
+ body center div#Granny div#maincol div#maincolinner div.partmain div.titlepart.partmain div.titlepart.thumbcntarr.leaveReply span.reddot 
+ body center div#Granny div#sidecol div#sidecolinner div.part div.submenu div.item br.dot 
+ body center div#Granny div#maincol div#maincolinner div#slideShow.partmain div.submenu div.aThumb center a div.thumbDate.thumbNameLine 
+ body center div#Granny div#maincol div#maincolinner div.partmain div.submenu div.aStory.aThumb center.titlepart a img.thumbDate.thumbcntarr.thumbNameLine 
+ body center div#Granny div#maincol div#maincolinner div.partmain div.titlepart.partmain div.titlepart.thumbcntarr.leaveReply span.reddot 
+ body center div#Granny div#maincol div#maincolinner div#slideShow.partmain div.titlepart span.thumbcntarr.leaveReply a.theTitleA 
+ body center div#Granny div div.part div.inside div.method span.name a 
+ body center div#Granny div#slideShow.partmain div table tbody tr td a.q 
+ body center div#Granny div#slideShow.partmain div table tbody tr td a#ss_playpause_link2.q 
+ body center div#Granny div#slideShow.partmain div table tbody tr td a#ss_playpause_link.q 
+ body center div#Granny div#maincol div#maincolinner div.partmain div.partmain div.end 
+ body center div#Granny center div.Commenting div#allComments div.bcell 
+ body center div#Granny center div.Commenting a 
+ body center div#Granny div div.part div.inside div.method form center div 
+ body center div#helpBoxContainer.Helping table#helpBox tbody tr td.dotbgful 
+ body center div#Granny div#maincol div#maincolinner div.partmain div.partmain div.submenu div.aThumb center a img 
+ body div#feedBody div#feedContent div.entry h3 a span 
+ body center div#Granny div.navigation div.aThumb center a br 
+ body center div#Granny center div.Commenting div.title span.leaveReply a 
+ body center div#Granny div.navigation div.aThumb center a img 
+ body center div#Granny div div.part div.inside div.method form center br 
+ body center div#Granny div#maincol div#maincolinner div.partmain div.submenu div.aStory div.titlepart a span.thumbcntarr 
+ body center div#Granny div.pvTitle span.dt 
+ body center div#Granny div#slideShow.partmain div a#ss_link2 img#ss_photo 
+ body center div#Granny div#maincol div#maincolinner div.partmain div.partmain div.submenu div.aThumb center a br.thumbDate.thumbNameLine 
+ body center div#Granny div#maincol div#maincolinner div#slideShow.partmain div.titlepart.midInfo span.reddot.small 
+ body center div#Granny div#sidecol div#sidecolinner div.part div.titlepart.submenu a.reddot 
+ body script 
+ body center div#helpBoxContainer.Helping table#helpBox tbody tr td div.fieldCont fieldset legend a 
+ body center div#Granny a 
+ body center div#Granny div.wholePhoto.navigation.pvTitle span.title.pvTitleInfo.back2mainR.footnote.titleName.photoTheImg.Commenting a.bottitle.darkdot.oneImageTitle 
+ body center div#Granny div#slideShow.partmain div.titlepart span.reddot.divClear 
+ body center div#Granny div div.part div.inside div.method div.name span a.submit.q 
+ body center div#Granny div div.part div.inside div.method form center input#loginAdminPass.text 
+ body div.topPhorm div.topPhormAbout 
+ body center div#Granny center a 
+ body center div#Granny div#maincol div#maincolinner div#slideShow.partmain div.start.end 
+ body center div#Granny div.wholePhoto div#photoBoxes div.photoBox div.titlePhotoBox.darkdot.spc 
+ body center div#Granny div#sidecol div#sidecolinner div.part div.submenu 
+ body center div#Granny div.wholePhoto div.photoTheImg div#theImage img.divClear 
+ body center div#Granny div#maincol div#maincolinner div.partmain div.end 
+ body center div#Granny div#slideShow.partmain div.titlepart span.leaveReply a#ss_smaller_link.q 
+ body center div#Granny div#slideShow.partmain div.titlepart span.leaveReply a 
+ body center div#Granny center div.Commenting div.bcell form table tbody tr#ComWVTR td script 
+ body center div#Granny div#slideShow.partmain div.titlepart div#headSlideshow brdt. 
+ body center div#Granny div#slideShow.partmain div div#ss_theend b 
+ body center div#Granny div.wholePhoto div#photoBoxes div.photoBox div.titlePhotoBox.darkdot.spc 
+ body center div#Granny center div.Commenting.part div.title.inside a.reddot 
+ body center div#Granny div#sidecol div#sidecolinner div.part div.submenu 
+ body div#feedBody div#feedContent div.entry h3 div.lastUpdated 
+ body center div#Granny div div.part div.inside div.method span.name span a.q 
+ body center div#helpBoxContainer.Helping table#helpBox tbody tr td div.fieldCont fieldset div#helpBoxInner 
+ body div#feedHeaderContainer div#feedHeader.feedBackground div#feedIntroText p#feedSubscriptionInfo2 
+ body div#feedHeaderContainer div#feedHeader.feedBackground div#feedIntroText p#feedSubscriptionInfo1 
+ body center div#Granny div.divClear 
+ body center div#Granny center div.Commenting div.bcell form table tbody tr td textarea#cmntTextArea 
+ body center div#Granny div#slideShow.partmain div div.divClear 
+ body center div#Granny div#slideShow.partmain br 
+ body div div.footer br 
+ body div 
+ body center div#Granny div#maincol div#maincolinner div#slideShow.partmain div.submenu div.aThumb center a div.thumbDate.thumbNameLine 
+ body center div#Granny div#maincol div#maincolinner div.partmain div.submenu div.aStory.aThumb center.titlepart a img.thumbDate.thumbcntarr.thumbNameLine 
+ body center div#Granny div.wholePhoto div#photoBoxes div.photoBox div.titlePhotoBox.darkdot.spc 
+ body center div#Granny div#slideShow.partmain div.titlepart div#headSlideshow brdt. 
+ body center div#Granny div.wholePhoto div#photoBoxes div.photoBox span#sumRate 
+ body center div#Granny div#sidecol div#sidecolinner div.part div.titlepart a 
+ body center div#Granny br 
+ body center div#Granny div.pvTitle span.pvTitleInfo a span#hin 
+ body div.topPhorm a 
+ body center div#Granny div div.footnote br 
+ body div.topPhorm span.headerDot 
+ body div div.footer a 
+ body center div#Granny div#maincol div#maincolinner div.partmain div.submenu div.aStory div.submenu div.aThumb center a img 
+ body center div#Granny div#headerBar span.VeryTitle span.topHeadAround 
+ body center div#Granny center div.Commenting div.bcell form table tbody tr#ComWVTR td img#wvwimg 
+ body center div#Granny div#maincol div#maincolinner div.partmain div.submenu div.aStory div.end a 
+ body center div#Granny div#maincol div#maincolinner div.partmain div.submenu div.aStory div.submenu div.aThumb center a br 
+ body center div#Granny center div.Commenting.part div.title.inside a.reddot 
+ body center div#Granny div.wholePhoto div#photoBoxes div.photoBox div.titlePhotoBox.darkdot.spc 
+ body div#feedBody div#feedTitle div#feedTitleContainer h1#feedTitleText 
+ body center div#Granny div.wholePhoto div#photoBoxes div.photoBox div noscript 
+ body center div#Granny div#slideShow.partmain div table tbody tr td select#ss_refresh.rate option 

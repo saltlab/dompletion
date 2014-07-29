@@ -1,0 +1,380 @@
+<script type="text/javascript">
+var a = {
+    "type": "Program",
+    "body": [
+        {
+            "type": "FunctionDeclaration",
+            "id": {
+                "type": "Identifier",
+                "name": "foo"
+            },
+            "params": [],
+            "defaults": [],
+            "body": {
+                "type": "BlockStatement",
+                "body": [
+                    {
+                        "type": "ExpressionStatement",
+                        "expression": {
+                            "type": "AssignmentExpression",
+                            "operator": "=",
+                            "left": {
+                                "type": "Identifier",
+                                "name": "a"
+                            },
+                            "right": {
+                                "type": "CallExpression",
+                                "callee": {
+                                    "type": "MemberExpression",
+                                    "computed": false,
+                                    "object": {
+                                        "type": "CallExpression",
+                                        "callee": {
+                                            "type": "MemberExpression",
+                                            "computed": false,
+                                            "object": {
+                                                "type": "Identifier",
+                                                "name": "document"
+                                            },
+                                            "property": {
+                                                "type": "Identifier",
+                                                "name": "getElementById"
+                                            }
+                                        },
+                                        "arguments": [
+                                            {
+                                                "type": "Literal",
+                                                "value": "as",
+                                                "raw": "\"as\""
+                                            }
+                                        ]
+                                    },
+                                    "property": {
+                                        "type": "Identifier",
+                                        "name": "getElementsByClassName"
+                                    }
+                                },
+                                "arguments": [
+                                    {
+                                        "type": "Literal",
+                                        "value": "sd",
+                                        "raw": "\"sd\""
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                ]
+            },
+            "rest": null,
+            "generator": false,
+            "expression": false
+        },
+        {
+            "type": "ExpressionStatement",
+            "expression": {
+                "type": "AssignmentExpression",
+                "operator": "=",
+                "left": {
+                    "type": "Identifier",
+                    "name": "b"
+                },
+                "right": {
+                    "type": "MemberExpression",
+                    "computed": false,
+                    "object": {
+                        "type": "MemberExpression",
+                        "computed": false,
+                        "object": {
+                            "type": "Identifier",
+                            "name": "b"
+                        },
+                        "property": {
+                            "type": "Identifier",
+                            "name": "c"
+                        }
+                    },
+                    "property": {
+                        "type": "Identifier",
+                        "name": "s"
+                    }
+                }
+            }
+        },
+        {
+            "type": "ExpressionStatement",
+            "expression": {
+                "type": "AssignmentExpression",
+                "operator": "=",
+                "left": {
+                    "type": "Identifier",
+                    "name": "c"
+                },
+                "right": {
+                    "type": "CallExpression",
+                    "callee": {
+                        "type": "Identifier",
+                        "name": "foo"
+                    },
+                    "arguments": []
+                }
+            }
+        }
+    ]
+};
+var debug = 0;
+
+var b = a['body'];
+var curScope = 1;
+var prevScope = '';
+var vars = [];
+var funcName = 'function';
+var params = new Array();
+var globals = [];
+var funcs = new Array();
+var DOM = [];
+DOM['document'] = 'body';
+console.log(DOM);
+
+if (typeof String.prototype.startsWith != 'function') {
+  // see below for better implementation!
+  String.prototype.startsWith = function (str){
+    return this.indexOf(str) == 0;
+  };
+}
+
+
+//check if variable is found in current scope or any of the parent scope
+function inScope(varName, vars, scope) {
+	if(debug)
+		console.log("checking inScope " + scope + " " + varName);
+	var ret = false;
+	
+	scope = scope.split(",");
+	var prevScope = "";
+	
+	for(var s in scope) {
+		var limit = parseInt(scope[s]);
+		
+		for(i=0;i<=limit;i++) {
+			check = prevScope + i;
+			if(vars[check] != null && vars[check]['varName'] == varName)
+				ret = true;	
+		}
+		prevScope += limit + ",";
+	}
+	return ret;
+}
+
+//check if it is a global variable
+function inGlobal(varName,funcName) {
+	if(debug)
+		console.log("checking inGlobal " + varName);
+	var ret = false;
+	
+	for(variable in globals) {
+		if(globals[funcName] != null && globals[funcName][varName])
+			ret = true;
+	}
+	return ret;
+}
+
+function getValueFromScope(variable,vars,scope) {
+	if(debug)
+		console.log("getting value from scope " + variable);
+	scope = scope.split(",");
+	var prevScope = '';
+	var ret = variable;
+	for(var s in scope) {
+		var limit = parseInt(scope[s]);
+		var checks = new Array();
+		for(i=0;i<=limit;i++) {
+			check = prevScope + i;
+			checks.push(check);
+		}
+		prevScope += limit + ",";
+	}
+	
+	checks = checks.reverse();
+	for(i=0;i<=checks.length;i++) {
+		var check = checks[i];
+		if(vars[check] != null && vars[check] != "" && vars[check]['varName'] == variable) {
+			ret = vars[check]['value'];
+			break;		
+		}
+	}
+	return ret;
+	
+}
+
+function processMemberExpression(data,vars,scope) {
+	var value = "";
+	if(data['object']['type'] == 'Identifier')
+		value += "." + data['object']['name'];
+	else if(data['object']['type'] == 'MemberExpression')
+		value += "." + processMemberExpression(data['object'],vars,scope);
+	else if(data['object']['type'] == 'CallExpression')
+		value += "." + processCallExpression(data['object'],vars,scope);
+		
+	if(data['property']['type'] == 'Identifier')
+		value += "." + data['property']['name'];
+	
+	value = value.substring(1);
+	return value;
+}
+
+function processCallExpression(data,vars,scope) {
+	var value = "";
+	
+	if(data['callee']['name'] != null && data['callee']['type'] == 'Identifier')
+		value += "." + data['callee']['name'];
+	else if(data['callee']['object']['type'] == 'Identifier')
+		value += "." + data['callee']['object']['name'];
+	else if(data['callee']['object']['type'] == 'MemberExpression')
+		value += "." + processMemberExpression(data['callee']['object'],vars,scope);
+	else if(data['callee']['object']['type'] == 'CallExpression')
+		value += "." + processCallExpression(data['callee']['object'],vars,scope);
+		
+	if(data['callee']['property'] != null && data['callee']['property']['type'] == 'Identifier')
+		value += "." + data['callee']['property']['name'];
+		
+	value = value.substring(1);
+	var args = data['arguments'];
+	var a = "";
+	for(arg in args) {
+		var s = args[arg];
+		a += "," + getValueFromTree(s,vars,scope);	
+	}
+	a = a.substring(1);
+	value += "(" + a + ")";
+	
+	return value;
+}
+
+function getValueFromTree(data, vars, scope) {
+//	console.log(data);
+//	console.log(vars);
+//	console.log(scope);
+	var value = "";
+		
+	if(data['type'] == 'Literal') {
+		value = data['raw'];
+	} else if	(data['type'] == 'Identifier') {
+		value = data['name'];
+		value = getValueFromScope(value,vars,scope);
+	
+	} else if(data['type'] == 'MemberExpression') {
+		value = processMemberExpression(data,vars,scope);
+	
+	} else if(data['type'] == 'CallExpression') {
+		value = processCallExpression(data,vars,scope);
+	}
+	return value;
+}
+
+function updateValue(value, varName, vars, scope) {
+
+	if(debug)
+		console.log("updating value: " + varName + "=" + value + " " + scope);
+	scope = scope.split(",");
+	var prevScope = '';
+	var checks = new Array();
+		
+	for(var s in scope) {
+		var limit = parseInt(scope[s]);
+		for(i=0;i<=limit;i++) {
+			check = prevScope + i;
+			checks.push(check);
+		}
+		prevScope += limit + ",";
+	}
+	
+	checks = checks.reverse();
+	for(i=0;i<=checks.length;i++) {
+		var check = checks[i];
+		if(vars[check] != null && vars[check]['varName'] == varName) {
+			vars[check]['value'] = value;
+			break;		
+		}
+	}
+}
+
+function parse(parseTree,funcName, vars, curScope, prevScope) {
+	for (var body in parseTree) {
+		var code = parseTree[body];
+
+		if(code['type'] == 'FunctionDeclaration') {
+			var params = code['params'];
+			var parami = 0;
+			for(parami in params) {
+				var variable = {
+					"varName" : params[parami]['name'],
+					"value" : ""
+				}
+				vars[prevScope + curScope + ',' + parami] = variable;
+			}
+			parami++;
+			vars = parse(code['body']['body'],code['id']['name'], vars, parami, prevScope + curScope + ',');
+			curScope++;
+		} else if(code['type'] == 'VariableDeclaration') {
+			var declarations = code['declarations'];
+			for (declaration in declarations) {
+			
+				var value = "";
+				if(declarations[declaration]['init'] != null)
+					value = getValueFromTree(declarations[declaration]['init'],vars,prevScope + curScope);
+				
+				var variable = {
+					"varName" : declarations[declaration]['id']['name'],
+					"value" : value
+				}
+				vars[prevScope + curScope] = variable;
+				curScope++;
+			}
+		} else if(code['type'] == 'ExpressionStatement') {
+			var expression = code['expression'];
+			if(expression['type'] == 'AssignmentExpression') {
+				if(expression['left'] != null) {
+					var varName = expression['left']['name'];
+					var value = "";
+					if(expression['right'] != null)
+						value = getValueFromTree(expression['right'],vars,prevScope + curScope);
+					
+					if(!inScope(varName, vars, prevScope + curScope) && !inGlobal(varName,funcName)) {
+						if(globals[funcName] == null)
+							globals[funcName] = [];
+						globals[funcName][varName] = value;
+						var variable = {
+						"varName" : varName,
+						"value" : value
+						}
+						vars[prevScope + curScope] = variable;
+						curScope++;
+					} else if(inScope(varName, vars, prevScope + curScope)){
+						updateValue(value,varName, vars, prevScope + curScope);
+					}
+					if(inGlobal(varName,funcName)){
+						globals[funcName][varName] = value;
+					}
+				}
+			} else if (expression['type'] == 'SequenceExpression') {
+			
+			}
+			
+		}
+	}
+	return vars;
+
+}
+
+//BinaryExpression
+//CallExpression , NewExpression
+//MemberExpression
+
+//Literal
+//Identifier
+
+vars = parse(b,funcName, vars,curScope,prevScope);
+console.log(vars);
+console.log(globals);
+</script>

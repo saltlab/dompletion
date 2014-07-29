@@ -1,0 +1,422 @@
+<style>
+a:hover{
+	color: red;
+}
+body{ 
+	margin-top: 100px;
+}
+/*div{
+	border:solid 1px red;
+	margin:10px;
+	overflow:auto;
+	min-height:50px;
+	float:left;
+	width:40%;
+}*/
+.circle {
+	border-radius: 50%;
+	width: 200px;
+	height: 200px; 
+	/* width and height can be anything, as long as they're equal */
+}
+.highlight {
+	background-color:#AAFFAA;
+}
+div[id^="wrapper_"]{
+	width: 90%;
+	max-width: 1100px;
+	min-width: 800px;
+	margin: 50px auto;
+	border:solid 1px gray;
+	padding:5px;
+}
+
+div[id^="columns_"] {
+	-webkit-column-count: 3;
+	-webkit-column-gap: 10px;
+	-webkit-column-fill: auto;
+	-moz-column-count: 3;
+	-moz-column-gap: 10px;
+	-moz-column-fill: auto;
+	column-count: 3;
+	column-gap: 15px;
+	column-fill: auto;
+}
+
+.pin {
+	display: inline-block;
+	background: #FEFEFE;
+	border: 2px solid #FAFAFA;
+	box-shadow: 0 1px 2px rgba(34, 25, 25, 0.4);
+	margin: 0 2px 15px;
+	-webkit-column-break-inside: avoid;
+	-moz-column-break-inside: avoid;
+	column-break-inside: avoid;
+	padding: 15px;
+	padding-bottom: 5px;
+	background: -webkit-linear-gradient(45deg, #FFF, #F9F9F9);
+	opacity: 1;
+	
+	-webkit-transition: all .2s ease;
+	-moz-transition: all .2s ease;
+	-o-transition: all .2s ease;
+	transition: all .2s ease;
+}
+
+.pin img {
+	width: 100%;
+	border-bottom: 1px solid #ccc;
+	padding-bottom: 15px;
+	margin-bottom: 5px;
+}
+
+.pin p {
+	font: 12px/18px Arial, sans-serif;
+	color: #333;
+	margin: 0;
+}
+
+@media (min-width: 960px) {
+	#columns {
+		-webkit-column-count: 4;
+		-moz-column-count: 4;
+		column-count: 4;
+	}
+}
+
+@media (min-width: 1100px) {
+	#columns {
+		-webkit-column-count: 5;
+		-moz-column-count: 5;
+		column-count: 5;
+	}
+}
+
+#navigator {
+	border: solid 1px #999999;
+	position: fixed;
+	top: 0px;
+	left:10px;
+	right:150px;
+	overflow:auto;
+	z-index:100;
+	background-color:#DDDDDD;
+	padding:10px;
+}
+#info {
+	border: solid 1px #999999;
+	position: fixed;
+	bottom: 0px;
+	right:10px;
+	overflow:auto;
+	z-index:100;
+	background-color:#DDDDDD;
+	padding:10px;
+	display:none;
+}
+#close {
+	border: solid 1px #999999;
+	position: fixed;
+	top: 0px;
+	width:100px;
+	right:10px;
+	overflow:auto;
+	z-index:100;
+	background-color:#DDDDDD;
+	padding:10px;
+
+}
+</style>
+<div id="navigator"></div>
+<div id="info"></div>
+<div id="close"><a href="javascript:void(0)" onclick="CloseMySelf()">Select & Close</a></div>
+<div id="placeholder"></div>
+
+<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script type="text/javascript">
+	
+		
+	function getUrlVars() {
+    	var vars = {};
+    	var parts = window.location.href.split('#')[0].replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+        	vars[key] = value;
+    	});
+    	return vars;
+	}
+	
+	function CloseMySelf() {
+		var params = getUrlVars();
+    	try {
+       		window.opener.HandlePopupResult(window.location.hash.substring(1).replace(/\//g," ").substring(hash.length),params['start']);
+    	}
+    	catch (err) {}
+    	
+    	window.close();
+    	return false;
+	}
+	
+	
+	function checkXML(file) {
+		var req = $.ajax({
+  			type: "GET",
+  			url: file,
+			async: false,
+  			success: function() { 
+				return true;
+			},
+  			error: function(xhr, status, error) {
+    			if(xhr.status==404) { 
+					return false;
+				}
+			}
+  		});
+  		
+		return req;
+	}
+
+    function readFile(DOMFile) {
+    	
+    	var xmlHttp = checkXML(DOMFile);
+		return xmlHttp.responseText;
+    
+    }
+    
+    function getMathces(DOMString,partialDOM,trim) {
+    
+    	trim = typeof trim !== 'undefined' ? trim : true;
+    	
+    	var matches = new Array();
+    	var inputs = DOMString.split(" ");
+    	
+    	for(var i=0;i<partialDOM.length;i++) {
+    		
+    		var path = partialDOM[i];
+    		var check = 1; 
+    		
+    		//first and last are empty spaces
+    		for(var j=1; j<inputs.length; j++) {
+    			
+    			var term = inputs[j];
+    			var indexDot = -1;
+    			var indexHash = -1;
+    			
+    			var dot = "(\\.[^\\.# ]+)*(?=[ ])", hash="(#[^#\\. ]+)*(?=[ \\.])", tagName = "[^#\\. ]*(?=[ \\.#])";
+    			
+    			if(term.charAt(0) == '.') {
+    				indexDot = 0;
+    			} else if(term.charAt(0) == '#') {
+    				indexHash = 0;
+    			} else {
+    				tagName = term.split("#")[0].split(".")[0];
+    			}
+    			if(term.indexOf("#") != -1) {
+    				indexHash = term.indexOf("#");
+    				hash = term.substring(indexHash).split(".")[0];
+    			}
+    			if(term.indexOf(".") != -1) {
+    				indexDot = term.indexOf(".");
+    				dot = term.substring(indexDot).split("#")[0];
+    				dot = dot.replace(".",")(?=(\\.[^\\.# ]+)*\\.");
+    				dot = dot + ")";
+    				dot = dot.substring(1);
+    			}
+    			var regex = " " + tagName + hash + dot + "(\\.[^\\.# ]+)*(?=[ ])";
+    			//regex = regex.replace(/\d+/,"\\d+");
+    			var reg = new RegExp(regex,"");
+    			var res = path.match(reg);
+    			
+    			if(res != null) {
+    				path = path.substring(res.index);
+    				if(trim)
+    					path = path.replace(reg,"");
+    			} else {
+    				check = 0;
+    				break;
+    			}
+    		}
+    		if(check == 1)
+    			matches.push(path);
+    	}
+    	return matches;
+    
+    }
+    
+    function getHierarchy(matches) {
+    	
+    	var fn = [];
+    	for(var i in matches) {
+    		var split = matches[i].substring(1).split(" ");
+    		for(i in split) {
+	    		var temp = split[i];
+	    		var temp2 = temp.split(".");
+	    		var temp3 = temp2[0];
+	    		//sorting classes alphabetically
+	    		temp2.splice(0,1);
+	    		temp2.sort();
+	    		temp2.splice(0,0,temp3);
+	    		var ins = temp2.join(".").replace("..",".");
+    			if(fn[i] == undefined)
+	    			fn[i] = [];
+	    		if(fn[i].indexOf(ins) < 0 && ins != "")
+		    		fn[i].push(ins);
+	    		
+    		}
+    	}
+    	return fn;
+    }
+    
+    function getTag(node) {
+    	var tag = '';
+    	tag = node.split(".")[0].split("#")[0];
+    	return tag;
+    }
+    function getID(node) {
+    	var id = '';
+    	if(node.indexOf("#") != -1) {
+    		var indexHash = node.indexOf("#");
+    		id = node.substring(indexHash).split(".")[0];
+    	}
+    	return id;
+    }
+    function getClasses(node) {
+    	var classes = new Array();
+    	if(node.indexOf(".") != -1) {
+    		var indexDot = node.indexOf(".");
+    		var temp = node.substring(indexDot);
+    		temp = temp.replace(/\./g," ");
+    		temp = temp.substring(1);
+    		classes = temp.split(" ");
+    	}
+    			
+    	return classes;
+    }
+    
+    function highlight(tag) {
+    	
+    	var matches = getMathces(" " + tag,map,false);
+    	console.log(tag);
+    	console.log(map);
+    	console.log(matches);
+    	for (var i in map) {
+    		var node = map[i];
+    	//	console.log(matches);
+    	//	console.log(node);
+    	//	console.log(matches.indexOf(node));
+    		if(matches.indexOf(node) != -1) {
+    			document.getElementById("selector-"+i).className = "highlight";
+    		} else {
+    		//		console.log(map);
+    		//		document.getElementById("selector-"+i).className = "";
+    		}
+    	}
+    	var covers = document.getElementsByClassName("cover");
+    	
+    	var out = '';
+    	for(var i = 0; i < covers.length; i++) {
+    		var cover = covers[i];
+    		var level = cover.id.substring(8);
+    		var count = cover.getElementsByClassName("highlight").length;
+    		out += "DOM Level: " + level + " - <b>"+count+"</b><br />"
+    	}
+    	document.getElementById("info").innerHTML = out;
+    	document.getElementById("info").style.display = "block";  	
+    }
+    function removeHighlight() {
+    	for (var i in map) {
+    		var node = map[i];
+    		document.getElementById("selector-"+i).className = "";
+    	}
+    	
+    	document.getElementById("info").style.display = "none";
+    	
+    }
+    
+    function navigate(path) {
+    	window.location.hash += "/" + path;
+    }
+    
+    function navigateConfirm(path) {
+    	var cnfrm = confirm("Id selector do not require a DOM sequence, as they are unique in DOM. Selecting this id will clear the previous hierarchy selection. Do you want to continue?");
+    	if(cnfrm == true)
+	    	window.location.hash = "#" + hash.substring(1).replace(/\s/g,"/") + "/" + path;
+		else
+			return false;
+    }
+    
+    function create(tag,id,classes,j,counter) {
+    	
+    	for(var i in classes) {
+    		classes[i] = "<a href='javascript:void()' onmouseover=\"highlight('."+classes[i]+"')\" onmouseout='removeHighlight()' onclick=\"navigate('."+classes[i]+"')\">."+classes[i]+"</a>";
+    	}
+    	var out = "<div class='pin'><table id='selector-"+counter+"' style='border:solid 1px gray; margin:10px auto; width:80%'><tr>";
+    	out += "<td style='width:33%; text-align:center'><a href='javascript:void()' onmouseover=\"highlight('"+tag+"')\" onmouseout='removeHighlight()' onclick=\"navigate('"+tag+"')\">"+tag+"</a></td>";
+    	out += "<td style='width:33%; text-align:center'><a href='javascript:void()' onmouseover=\"highlight('"+id+"')\" onmouseout='removeHighlight()' onclick=\"navigateConfirm('"+id+"')\">"+id+"</a></td>";
+    	out += "<td style='width:33%; text-align:center'>"+classes.join("<br />")+"</td>";
+    	out += "</tr></table></div>";
+    	document.getElementById("columns_"+j+"").innerHTML += out;
+    	
+    	
+    }
+    
+    function createPage(context,hash) {
+    	console.log(context);
+    	console.log(hash);
+    	var navigator = document.getElementById("navigator");
+    	var contextArr = context.substring(hash.length).substring(1).split(" ");
+    	var c = "";
+    	var out = '<a href="#'+hash.substring(1).replace(/\s/g,"/")+'"><img src="https://www.thearc.org/image/fusion/house-icon.png" height="13" /></a>';
+    	for(var i in contextArr) {
+    		c += contextArr[i];
+	    	out += ' > <a href="#'+c+'">'+contextArr[i]+'</a>';
+	    	c += "/";
+	    }
+    	
+    	navigator.innerHTML = out;
+    	
+    	document.getElementById("placeholder").innerHTML = "";
+    	
+    	var dom = getHierarchy(getMathces(context,partialDOM));
+    	var counter = 0;
+    	map = [];
+    	for(var j in dom) {
+			var nodes = dom[j];
+			document.getElementById("placeholder").innerHTML += '<div id="wrapper_'+parseInt(parseInt(j)+1)+'" class="cover"><h1 style="width:90%; text-align:center; margin:0px auto">DOM Level '+parseInt(parseInt(j)+1)+'</h1><div id="columns_'+j+'"></div></div>';
+	    	for(var i in nodes) {
+	    		var node = nodes[i];
+	    		var tag = getTag(node);
+    			var id = getID(node);
+    			var classes = getClasses(node); 
+    		//	console.log(tag);
+    		//	console.log(id);
+    		//	console.log(classes);
+    			create(tag,id,classes,j,counter);
+    			map[counter] = " " + node + " ";
+    			counter++;
+    		}
+    	}
+    }
+    
+    function update() {
+    	var temp = " " + window.location.hash.substring(1).replace(/\//g, " ");
+    	if(temp != context) {
+    		context = temp;
+    		createPage(context,hash);
+    	}
+    }
+    
+    var partialDOM = readFile("reduced.txt");
+	partialDOM = partialDOM.split("\n");
+  	var map = new Array();
+  	var context = " " + window.location.hash.substring(1).replace(/\//g, " ");
+    var hash = context;
+    console.log(context);
+    
+    
+    createPage(context,hash);
+    
+    setInterval("update()",1000);
+    
+    
+    
+        
+</script>
