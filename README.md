@@ -25,10 +25,10 @@ Dompletion has been tested with the photo gallery application [Phormer](http://p
 
 In order to use the tool, please follow the following steps.
 
-#### Enable ''Live Development'' in Brackets. 
-#### Then click on the '''♂ Manual Record''' button to start capturing the DOM states. 
-#### Navigate the web application to the required state.
-#### Click '''◙ Stop Record''' button to the recording and start using the code completion feature.
+* Enable ''Live Development'' in Brackets. 
+* Then click on the ''♂ Manual Record'' button to start capturing the DOM states. 
+* Navigate the web application to the required state.
+* Click ''◙ Stop Record'' button to the recording and start using the code completion feature.
 
 ## Contributing
 
