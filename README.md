@@ -6,7 +6,7 @@ Dompletion assists developers by providing DOM-Aware JavaScript code completion,
 
 ## Paper
 
-The technique behind Clematis is published as a research paper at ASE 2014. It is titled ["Dompletion: DOM-Aware JavaScript Code Completion"](http://salt.ece.ubc.ca/publications/kartik_ase14.html) and is available as a PDF.
+The technique behind Dompletion is published as a research paper at ASE 2014. It is titled ["Dompletion: DOM-Aware JavaScript Code Completion"](http://salt.ece.ubc.ca/publications/kartik_ase14.html) and is available as a PDF.
 
 ## Using Dompletion
 
