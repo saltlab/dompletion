@@ -37,12 +37,14 @@ define(function (require, exports, module) {
   		};
 	}
     function getTargetLine(editor,pos) {
-    	var textBefore = editor.document.getLine(pos.line).substr(0,pos.ch);
+    	var textBefore = editor.document.getLine(pos.line).substr(0,pos.ch).replace(/dg\('/g,"document.getElementById('");
     	return textBefore;
     }
     function extractDOMCall(line) {
     	
-    	var DOMAccessRegex = new RegExp("([a-zA-Z_0-9\$\-]+(\.getElementById\\(.*\\)|\.getElementsByTagName\\(.*\\)|\.getElementsByClassName\\(.*\\))*(\.getElementById\\(['\"]|\.getElementsByTagName\\(['\"]|\.getElementsByClassName\\(['\"]))[^'\"]*","g");
+    	var DOMAccessRegex = new RegExp("([a-zA-Z_0-9\$\-]+(\.getElementById\\(((?!\\)).)*\\)|\.getElementsByTagName\\(((?!\\)).)*\\)\\[\\d+\\]|\.getElementsByClassName\\(((?!\\)).)*\\)\\[\\d+\\]|\.querySelector\\(((?!\\)).)*\\)|\.querySelectorAll\\(((?!\\)).)*\\)\\[\\d+\\])*(\.getElementById\\(['\"]((?!\\)).)*$|\.getElementsByTagName\\(['\"]((?!\\)).)*$|\.getElementsByClassName\\(['\"]((?!\\)).)*$|\.querySelector\\(['\"]((?!\\)).)*$|\.querySelectorAll\\(['\"]((?!\\)).)*$))","g");
+    	
+    	
     	return line.match(DOMAccessRegex);
     }
     
@@ -66,7 +68,7 @@ define(function (require, exports, module) {
         console.log(targetLine);
         
         var incompleteCode = extractDOMCall(targetLine);
-		
+        
 		if(strings.length == 0) {
 			console.log("need crawling info");
 			return false;
@@ -101,7 +103,7 @@ define(function (require, exports, module) {
         this.match = match;
         
         var cursor = editor.getCursorPos();
-        var code = editor.document.getText();
+        var code = editor.document.getText().replace(/dg\('/g,"document.getElementById('");
 		console.log(code);
 		code = removeLine(code, cursor.line+1);
 		console.log(code);
@@ -186,7 +188,7 @@ define(function (require, exports, module) {
         var manualRecordButton = $("<a>")
             .text("♂")
             .attr("id","manual-record")
-            .attr("title", "Reload page in browser")
+            .attr("title", "DOMpletion Manual Crawl")
             .click(manualRecord)
             .css({
                 "margin-right":     "10px",
@@ -203,7 +205,7 @@ define(function (require, exports, module) {
         var autoRecordButton = $("<a>")
             .text("♀")
             .attr("id","auto-record")
-            .attr("title", "Reload page in browser")
+            .attr("title", "DOMpletion Auto Crawl")
             .click(autoRecord)
             .css({
                 "margin-right":     "10px",
@@ -220,7 +222,7 @@ define(function (require, exports, module) {
         var stopRecordButton = $("<a>")
             .text("◙")
             .attr("id","stop-record")
-            .attr("title", "Reload page in browser")
+            .attr("title", "Stop DOM Analysis")
             .click(stopRecord)
             .css({
                 "margin-right":     "10px",
@@ -238,7 +240,7 @@ define(function (require, exports, module) {
         var clearRecordButton = $("<a>")
             .text("◘")
             .attr("id","clear-record")
-            .attr("title", "Reload page in browser")
+            .attr("title", "Clear DOM Analysis")
             .click(clearRecord)
             .css({
                 "margin-right":     "10px",
@@ -283,7 +285,7 @@ define(function (require, exports, module) {
     			$("#stop-record").show();
     			$("#clear-record").hide();
     			recorder = 2; //auto 
-    			interval = setInterval(auto,1000);
+    			interval = setInterval(auto,5000);
     		}	
     	}
     }
@@ -304,6 +306,7 @@ define(function (require, exports, module) {
     }
     
     function append(response) {
+    	console.log(response);
         var remoteDOM = response.result.value;
         var wasThrown = response.wasThrown;
             
@@ -318,8 +321,8 @@ define(function (require, exports, module) {
     }
     
     function manual(){
-    	var evalStr = "document.getElementsByTagName('body')[0].innerHTML;";
     	if(checkLiveDevelopment()) {
+	        var evalStr = "document.getElementsByTagName('body')[0].innerHTML;";
 	        Inspector.Runtime.evaluate(evalStr, append);
     	} else {
     		stopRecord();
@@ -327,7 +330,26 @@ define(function (require, exports, module) {
     }
     
     function auto() {
+    	
+		if(checkLiveDevelopment()) {
+			var baseUrl = LiveDevelopment.getServerBaseUrl();
+			var evalStr = "document.getElementsByTagName('body')[0].innerHTML";
+			Inspector.Runtime.evaluate(evalStr, append); 
+	        setTimeout(changePage,1000);
+	        
+    	} else {
+    		stopRecord();
+    	}
     }
+    
+    function changePage() {
+    	if(checkLiveDevelopment()) {
+    		var baseUrl = LiveDevelopment.getServerBaseUrl();
+			var evalStr = "if (typeof String.prototype.startsWith != 'function') { String.prototype.startsWith = function (str){ return this.indexOf(str) == 0;};} function toArray(obj) { var array = []; for (var i = obj.length >>> 0; i--;) { array[i] = obj[i]; } return array;} var links = toArray(document.getElementsByTagName('a')).sort( function() { return 0.5 - Math.random() } ); var test = false; if(links.length > 0) {for(var i=0; i<links.length; i++) { if(links[i].href.startsWith('"+baseUrl+"')){window.location.href = links[i].href; test = true; break;}}} if(!test) {window.location.href = '"+baseUrl+"';}"; 
+    		Inspector.Runtime.evaluate(evalStr, doNothing);
+    	}
+    }
+    function doNothing(){}
     
     function create(htmlStr) {
     	var frag = document.createDocumentFragment(),
@@ -359,13 +381,16 @@ define(function (require, exports, module) {
    		string += tag + id + css + " ";
    			
     	var childNodes = html.childNodes;
-    	if(childNodes.length > 1) {
+    	var check = false;
+    	if(childNodes.length > 0) {
     		for(var i in childNodes) {
     			if(childNodes[i].nodeType == 1) {
+    				check = true;
     				parse(childNodes[i],string);
     			}
     		}
-    	} else {
+    	}
+    	if(!check){
     		if(strings.indexOf(string) == -1)
     			strings.push(string);
     	}
